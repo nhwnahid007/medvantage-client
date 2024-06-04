@@ -2,13 +2,66 @@ import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
+import { useForm } from "react-hook-form";
+import UseAxiosPublic from "../../Hooks/UseAxiosPublic";
+import { AuthContext } from "../../Providers/AuthProvider";
+import toast from "react-hot-toast";
+import useAuth from "../../Hooks/UseAuth";
+const image_hosting_key=import.meta.env.VITE_IMAGE_HOSTING_KEY;
+console.log(image_hosting_key)
+const image_hosting_api=`https://api.imgbb.com/1/upload?key=${image_hosting_key}`
+console.log(image_hosting_api)
 const SignUp = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const [showPassword, setShowPassword] = useState(false);
+  const axiosPublic = UseAxiosPublic()
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+
+  const {createUser,updateUserProfile} = useAuth(AuthContext)
+
+  const onSubmit = async (data) => {
+    try {
+      console.log(data);
+  
+      const email = data.email;
+      const password = data.password;
+      const role = data.role;
+      console.log(role)
+  
+      // Create user
+      const user = await createUser(email, password);
+      console.log('User created:', user);
+  
+      // Upload image only if user creation is successful
+      if (user) {
+        // Upload image to imgbb and get URL
+        const formData = new FormData();
+        formData.append('image', data.photo[0]);
+  
+        const res = await axiosPublic.post(image_hosting_api, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+  
+        console.log('Image upload response:', res.data);
+  
+        const photoUrl = res.data.data.display_url;
+  
+        // Update user profile with photo URL
+        await updateUserProfile(email, photoUrl);
+        toast.success('Signed Up successfully');
+      }
+    } catch (error) {
+      console.error('Error during signup:', error);
+      toast.error('Error during signup. Please try again later.');
+    }
+  };
+  
+
   return (
     <div>
       <Helmet>
@@ -20,23 +73,38 @@ const SignUp = () => {
             <h2 className="font-bold text-center text-5xl text-[#7600dc]">
               Sign Up
             </h2>
-            <p className=" opacity-75 font-semibold mt-4">
+            <p className="opacity-75 font-semibold mt-4">
               If you are not a member yet, easily sign up in now.
             </p>
 
-            <form action="" className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
               <input
+                {...register("email", { required: true })}
                 className="p-2 mt-8 rounded-xl border"
                 type="email"
-                name="email"
                 placeholder="Email"
               />
+              {errors.email && <span className="text-red-500">Email is required</span>}
+              <input
+                {...register("photo", { required: true })}
+                className="p-2 mt-8 rounded-xl border"
+                type="file"
+                accept="image/*"
+                placeholder="photo"
+              />
+              {errors.email && <span className="text-red-500">Email is required</span>}
+
+              <select defaultValue='default' {...register("role")} className="p-2 rounded-xl border">
+                <option disabled value="default" defaultValue>Select your role</option>
+                <option value="user">User</option>
+                <option value="seller">Seller</option>
+              </select>
+
               <div className="relative">
                 <input
+                  {...register("password", { required: true })}
                   className="p-2 rounded-xl border w-full"
                   type={showPassword ? "text" : "password"}
-                  name="password"
-                  id="password"
                   placeholder="Password"
                 />
                 <button
@@ -51,6 +119,7 @@ const SignUp = () => {
                   )}
                 </button>
               </div>
+              {errors.password && <span className="text-red-500">Password is required</span>}
               <button
                 className="bg-[#7600dc] text-white py-2 rounded-xl hover:scale-105 duration-300 hover:bg-[#a247f1] font-medium"
                 type="submit"

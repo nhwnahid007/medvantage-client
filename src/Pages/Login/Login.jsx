@@ -2,12 +2,41 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Helmet } from "react-helmet-async";
+import { useForm } from "react-hook-form";
+import { AuthContext } from "../../Providers/AuthProvider";
+import toast from "react-hot-toast";
+import useAuth from "../../Hooks/UseAuth";
 
 const Login = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const [showPassword, setShowPassword] = useState(false);
-
+const {signIn} = useAuth(AuthContext)
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const onSubmit =async (data) => {
+    console.log(data); 
+
+    try {
+      console.log(data);
+  
+      const email = data.email;
+      const password = data.password;
+    
+      // login user
+      const user = await signIn(email, password);
+      console.log('User Logged In:', user);
+
+      toast.success('Sign In Successfully')
+  
+      // Upload image only if user creation is successful
+      
+    } catch (error) {
+      console.error('Error during signup:', error);
+      toast.error('Error during signup. Please try again later.');
+    }
+
   };
 
   return (
@@ -25,15 +54,18 @@ const Login = () => {
               If you are already a member, easily log in now.
             </p>
 
-            <form action="" className="flex flex-col gap-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
               <input
+                {...register("email", { required: true })}
                 className="p-2 mt-8 rounded-xl border"
                 type="email"
                 name="email"
                 placeholder="Email"
               />
+              {errors.email && <span className="text-red-500">Email is required</span>}
               <div className="relative">
                 <input
+                  {...register("password", { required: true })}
                   className="p-2 rounded-xl border w-full"
                   type={showPassword ? "text" : "password"}
                   name="password"
@@ -52,6 +84,7 @@ const Login = () => {
                   )}
                 </button>
               </div>
+              {errors.password && <span className="text-red-500">Password is required</span>}
               <button
                 className="bg-[#7600dc] text-white py-2 rounded-xl hover:scale-105 duration-300 hover:bg-[#a247f1] font-medium"
                 type="submit"
