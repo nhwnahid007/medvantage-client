@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { RiMenu3Line, RiCloseLine } from "react-icons/ri"; 
+import { RiMenu3Line, RiCloseLine } from "react-icons/ri";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +11,29 @@ const Navbar = () => {
   const navLinks = (
     <>
       <li>
-        <a>Item 1</a>
+        <NavLink
+          to="/"
+          className='m-1'
+          style={({ isActive }) => ({
+            color: isActive ? "#fff" : "#545e6f",
+            background: isActive ? "#7600dc" : "#f0f0f0",
+          })}
+        >
+          Users
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+
+          to="/"
+          className='m-1'
+          style={({ isActive }) => ({
+            color: isActive ? "#fff" : "#545e6f",
+            background: isActive ? "#7600dc" : "#f0f0f0",
+          })}
+        >
+          Users
+        </NavLink>
       </li>
     </>
   );
@@ -86,12 +109,14 @@ const Navbar = () => {
             }`}
           >
             <li>
-              <a className="justify-between">
-                Update Profile
-              </a>
+              <a className="justify-between">Update Profile</a>
             </li>
-            <li><a>Settings</a></li>
-            <li><a>Logout</a></li>
+            <li>
+              <a>Settings</a>
+            </li>
+            <li>
+              <a>Logout</a>
+            </li>
           </ul>
         </div>
       </div>
