@@ -1,96 +1,110 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import UseAxiosPublic from "../../Hooks/UseAxiosPublic";
 import { AuthContext } from "../../Providers/AuthProvider";
 import toast from "react-hot-toast";
 import useAuth from "../../Hooks/UseAuth";
-const image_hosting_key=import.meta.env.VITE_IMAGE_HOSTING_KEY;
-console.log(image_hosting_key)
-const image_hosting_api=`https://api.imgbb.com/1/upload?key=${image_hosting_key}`
-console.log(image_hosting_api)
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+console.log(image_hosting_key);
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+console.log(image_hosting_api);
 const SignUp = () => {
-  const { register, handleSubmit, formState: { errors },reset } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
   const [showPassword, setShowPassword] = useState(false);
-  const axiosPublic = UseAxiosPublic()
+  const axiosPublic = UseAxiosPublic();
+
+  const location = useLocation();
+  console.log(location);
+  const navigate = useNavigate();
+
+  const from = location?.state ? location.state : "/";
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const {createUser,updateUserProfile,googleSignIn} = useAuth(AuthContext)
+  const { createUser, updateUserProfile, googleSignIn } = useAuth(AuthContext);
 
   const onSubmit = async (data) => {
     try {
       console.log(data);
-  
+
       const name = data.name;
       const email = data.email;
       const password = data.password;
       const role = data.role;
-      console.log(role)
-  
+      console.log(role);
+
       // Create user
       const user = await createUser(email, password);
-      console.log('User created:', user);
-  
+      console.log("User created:", user);
+
       // Upload image only if user creation is successful
       if (user) {
         // Upload image to imgbb and get URL
         const formData = new FormData();
-        formData.append('image', data.photo[0]);
-  
+        formData.append("image", data.photo[0]);
+
         const res = await axiosPublic.post(image_hosting_api, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         });
-  
-        console.log('Image upload response:', res.data);
-  
+
+        console.log("Image upload response:", res.data);
+
         const photoUrl = res.data.data.display_url;
-  
+
         // Update user profile with photo URL
         await updateUserProfile(name, photoUrl);
-        
-        toast.success('Signed Up successfully');
-        const userInfo = {name,email,role,photoUrl}
-        console.log(userInfo)
-        const userRes = await axiosPublic.put('/users',userInfo)
-        console.log(userRes)
-        reset()
+
+        toast.success("Signed Up successfully");
+        const userInfo = { name, email, role, photoUrl };
+        console.log(userInfo);
+        const userRes = await axiosPublic.put("/users", userInfo);
+        console.log(userRes);
+        reset();
+        navigate(from);
       }
     } catch (error) {
-      console.error('Error during signup:', error);
-      toast.error('Error during signup. Please try again later.');
+      console.error("Error during signup:", error);
+      toast.error("Error during signup. Please try again later.");
     }
   };
 
-  const handleGoogleSignIn = ()=>{
+  const handleGoogleSignIn = () => {
     googleSignIn()
-    .then( async res=>{
-      console.log(res.user)
-      const role = 'user'
-      const name = res.user.displayName;
-      const email = res.user.email;
-      const photoUrl = res.user.photoURL;
+      .then(async (res) => {
+        console.log(res.user);
+        const role = "user";
+        const name = res.user.displayName;
+        const email = res.user.email;
+        const photoUrl = res.user.photoURL;
 
-      const googleInfo = {
-        name,email,role,photoUrl
-      }
-      const userRes = await axiosPublic.put('/users',googleInfo)
-      console.log(userRes)
+        const googleInfo = {
+          name,
+          email,
+          role,
+          photoUrl,
+        };
+        const userRes = await axiosPublic.put("/users", googleInfo);
+        console.log(userRes);
 
-      console.log(googleInfo)
-
-    })
-    .catch(err=>{
-      console.log(err)
-    })
-  } 
-  
+        console.log(googleInfo);
+        navigate(from);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div>
@@ -107,21 +121,28 @@ const SignUp = () => {
               If you are not a member yet, easily sign up in now.
             </p>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-4"
+            >
               <input
                 {...register("name", { required: true })}
                 className="p-2 mt-8 rounded-xl border"
                 type="text"
                 placeholder="name"
               />
-              {errors.name && <span className="text-red-500">Email is required</span>}
+              {errors.name && (
+                <span className="text-red-500">Email is required</span>
+              )}
               <input
                 {...register("email", { required: true })}
                 className="p-2 rounded-xl border"
                 type="email"
                 placeholder="Email"
               />
-              {errors.email && <span className="text-red-500">Email is required</span>}
+              {errors.email && (
+                <span className="text-red-500">Email is required</span>
+              )}
               <input
                 {...register("photo", { required: true })}
                 className="p-2 mt-2 rounded-xl border"
@@ -129,24 +150,38 @@ const SignUp = () => {
                 accept="image/*"
                 placeholder="photo"
               />
-              {errors.photo && <span className="text-red-500">This field is required</span>}
+              {errors.photo && (
+                <span className="text-red-500">This field is required</span>
+              )}
 
-              <select defaultValue='default' {...register("role")} className="p-2 rounded-xl border">
-                <option disabled value="default" defaultValue>Select your role</option>
+              <select
+                defaultValue="default"
+                {...register("role")}
+                className="p-2 rounded-xl border"
+              >
+                <option disabled value="default" defaultValue>
+                  Select your role
+                </option>
                 <option value="user">User</option>
                 <option value="seller">Seller</option>
               </select>
-              {errors.role && <span className="text-red-500">This field is required</span>}
+              {errors.role && (
+                <span className="text-red-500">This field is required</span>
+              )}
               <div className="relative">
                 <input
-                  {...register("password", { required: true,  minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters",
-                  },  pattern: {
-                    value: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/,
-                    message:
-                      "Password must have one lowercase, one uppercase, one special character, and one number",
-                  }, })}
+                  {...register("password", {
+                    required: true,
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                    pattern: {
+                      value: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/,
+                      message:
+                        "Password must have one lowercase, one uppercase, one special character, and one number",
+                    },
+                  })}
                   className="p-2 rounded-xl border w-full"
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
@@ -179,19 +214,24 @@ const SignUp = () => {
               {errors.password?.type === "pattern" && (
                 <>
                   {!/(?=.*[a-z])/.test(errors.password.ref.value) && (
-                    <span className="text-red-500">Must include one lowercase letter</span>
-                    
-                  )
-                  
-                  }
+                    <span className="text-red-500">
+                      Must include one lowercase letter
+                    </span>
+                  )}
                   {!/(?=.*[A-Z])/.test(errors.password.ref.value) && (
-                    <span className="text-red-500">Must include one uppercase letter</span>
+                    <span className="text-red-500">
+                      Must include one uppercase letter
+                    </span>
                   )}
                   {!/(?=.*[0-9])/.test(errors.password.ref.value) && (
-                    <span className="text-red-500">Must include one number</span>
+                    <span className="text-red-500">
+                      Must include one number
+                    </span>
                   )}
                   {!/(?=.*[!@#$&*])/.test(errors.password.ref.value) && (
-                    <span className="text-red-500">Must include one special character</span>
+                    <span className="text-red-500">
+                      Must include one special character
+                    </span>
                   )}
                 </>
               )}
@@ -208,7 +248,7 @@ const SignUp = () => {
               <hr className="border-gray-300" />
             </div>
             <button
-            onClick={handleGoogleSignIn}
+              onClick={handleGoogleSignIn}
               className="bg-white gap-2 border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300 hover:bg-[#7600dc] font-medium"
               aria-label="Login with Google"
             >

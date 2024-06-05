@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { RiMenu3Line, RiCloseLine } from "react-icons/ri";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import useAuth from "../../../Hooks/UseAuth";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,12 +10,18 @@ const Navbar = () => {
   const dropdownRef = useRef(null);
   const avatarRef = useRef(null);
 
+  const location = useLocation();
+  console.log(location);
+  const navigate = useNavigate();
+
+  const { user, logOut } = useAuth();
+
   const navLinks = (
     <>
       <li>
         <NavLink
           to="/"
-          className='m-1'
+          className="m-1"
           style={({ isActive }) => ({
             color: isActive ? "#fff" : "#545e6f",
             background: isActive ? "#7600dc" : "#f0f0f0",
@@ -24,9 +32,8 @@ const Navbar = () => {
       </li>
       <li>
         <NavLink
-
           to="/"
-          className='m-1'
+          className="m-1"
           style={({ isActive }) => ({
             color: isActive ? "#fff" : "#545e6f",
             background: isActive ? "#7600dc" : "#f0f0f0",
@@ -62,6 +69,14 @@ const Navbar = () => {
     };
   }, []);
 
+  const handleSignOut = () => {
+    logOut().then(() => {
+      console.log("logged out");
+      toast.success("Good job! Successfully Logged Out!");
+      navigate("/");
+    });
+  };
+
   return (
     <div className="navbar bg-base-100">
       <div className="navbar-start">
@@ -89,36 +104,49 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">{navLinks}</ul>
       </div>
       <div className="navbar-end">
-        <div className="dropdown dropdown-end" ref={avatarRef}>
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle avatar"
-            onClick={toggleAvatarMenu}
-          >
-            <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-              />
+        {user ? (
+          <>
+            <div className="dropdown dropdown-end" ref={avatarRef}>
+              <div
+                tabIndex={0}
+                role="button"
+                className="btn btn-ghost btn-circle avatar"
+                onClick={toggleAvatarMenu}
+              >
+                <div className="w-10 rounded-full">
+                  <img
+                    alt="Tailwind CSS Navbar component"
+                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                  />
+                </div>
+              </div>
+              <ul
+                className={`menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 ${
+                  isAvatarOpen ? "block" : "hidden"
+                }`}
+              >
+                <li>
+                  <a className="justify-between">Update Profile</a>
+                </li>
+                <li>
+                  <a>Settings</a>
+                </li>
+                <li>
+                  <button onClick={handleSignOut} className="font-bold">
+                    Logout
+                  </button>
+                </li>
+              </ul>
             </div>
-          </div>
-          <ul
-            className={`menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 ${
-              isAvatarOpen ? "block" : "hidden"
-            }`}
+          </>
+        ) : (
+          <NavLink
+            to="/login"
+            className="m-2 font-bold text-white bg-[#7600dc] btn"
           >
-            <li>
-              <a className="justify-between">Update Profile</a>
-            </li>
-            <li>
-              <a>Settings</a>
-            </li>
-            <li>
-              <a>Logout</a>
-            </li>
-          </ul>
-        </div>
+            Login
+          </NavLink>
+        )}
       </div>
     </div>
   );
