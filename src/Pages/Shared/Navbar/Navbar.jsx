@@ -27,19 +27,19 @@ const Navbar = () => {
             background: isActive ? "#7600dc" : "#f0f0f0",
           })}
         >
-          Users
+          Home
         </NavLink>
       </li>
       <li>
         <NavLink
-          to="/"
+          to="/shop"
           className="m-1"
           style={({ isActive }) => ({
             color: isActive ? "#fff" : "#545e6f",
             background: isActive ? "#7600dc" : "#f0f0f0",
           })}
         >
-          Users
+          Shop
         </NavLink>
       </li>
     </>

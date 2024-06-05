@@ -113,7 +113,7 @@ const SignUp = () => {
       </Helmet>
       <section className="bg-gray-100 min-h-screen flex box-border justify-center items-center">
         <div className="bg-[#f0ece9] rounded-2xl flex max-w-3xl p-5 items-center">
-          <div className="md:w-1/2 px-8">
+          <div className="md:w-1/2">
             <h2 className="font-bold text-center text-5xl text-[#7600dc]">
               Sign Up
             </h2>
@@ -281,12 +281,12 @@ const SignUp = () => {
             </button>
 
             <div className="mt-6 text-sm flex justify-between items-center container-mr">
-              <p className="mr-3 font-semibold opacity-75 md:mr-0 ">
-                If you are already a member, easily sign in here...
+              <p className=" font-semibold opacity-75 md:mr-0 ">
+                 Or easily sign in here...
               </p>
               <Link
                 to="/login"
-                className="hover:border register text-white bg-[#7600dc] hover:border-gray-400 rounded-xl py-2 px-5 hover:scale-110 hover:bg-[#00157424] font-semibold duration-300"
+                className="hover:border register text-white bg-[#7600dc] hover:border-gray-400 rounded-xl py-2 px-2 hover:scale-110 hover:bg-[#00157424] font-semibold duration-300"
               >
                 Login
               </Link>
