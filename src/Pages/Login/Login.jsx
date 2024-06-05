@@ -6,11 +6,13 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Providers/AuthProvider";
 import toast from "react-hot-toast";
 import useAuth from "../../Hooks/UseAuth";
+import UseAxiosPublic from "../../Hooks/UseAxiosPublic";
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [showPassword, setShowPassword] = useState(false);
-const {signIn} = useAuth(AuthContext)
+const {signIn,googleSignIn} = useAuth(AuthContext)
+const axiosPublic = UseAxiosPublic()
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -38,6 +40,31 @@ const {signIn} = useAuth(AuthContext)
     }
 
   };
+
+  const handleGoogleSignIn = ()=>{
+    googleSignIn()
+    .then( async res=>{
+      console.log(res.user)
+      const role = 'user'
+      const name = res.user.displayName;
+      const email = res.user.email;
+      const photoUrl = res.user.photoURL;
+
+      const googleInfo = {
+        name,email,role,photoUrl
+      }
+      const userRes = await axiosPublic.put('/users',googleInfo)
+      console.log(userRes)
+
+      console.log(googleInfo)
+      toast.success('Sign in successfully')
+
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  } 
+  
 
   return (
     <div>
@@ -98,6 +125,7 @@ const {signIn} = useAuth(AuthContext)
               <hr className="border-gray-300" />
             </div>
             <button
+            onClick={handleGoogleSignIn}
               className="bg-white gap-2 border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300 hover:bg-[#60a8bc4f] font-medium"
               aria-label="Login with Google"
             >

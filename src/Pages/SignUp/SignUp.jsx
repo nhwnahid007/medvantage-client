@@ -12,7 +12,7 @@ console.log(image_hosting_key)
 const image_hosting_api=`https://api.imgbb.com/1/upload?key=${image_hosting_key}`
 console.log(image_hosting_api)
 const SignUp = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors },reset } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   const axiosPublic = UseAxiosPublic()
 
@@ -20,12 +20,13 @@ const SignUp = () => {
     setShowPassword(!showPassword);
   };
 
-  const {createUser,updateUserProfile} = useAuth(AuthContext)
+  const {createUser,updateUserProfile,googleSignIn} = useAuth(AuthContext)
 
   const onSubmit = async (data) => {
     try {
       console.log(data);
   
+      const name = data.name;
       const email = data.email;
       const password = data.password;
       const role = data.role;
@@ -52,14 +53,43 @@ const SignUp = () => {
         const photoUrl = res.data.data.display_url;
   
         // Update user profile with photo URL
-        await updateUserProfile(email, photoUrl);
+        await updateUserProfile(name, photoUrl);
+        
         toast.success('Signed Up successfully');
+        const userInfo = {name,email,role,photoUrl}
+        console.log(userInfo)
+        const userRes = await axiosPublic.put('/users',userInfo)
+        console.log(userRes)
+        reset()
       }
     } catch (error) {
       console.error('Error during signup:', error);
       toast.error('Error during signup. Please try again later.');
     }
   };
+
+  const handleGoogleSignIn = ()=>{
+    googleSignIn()
+    .then( async res=>{
+      console.log(res.user)
+      const role = 'user'
+      const name = res.user.displayName;
+      const email = res.user.email;
+      const photoUrl = res.user.photoURL;
+
+      const googleInfo = {
+        name,email,role,photoUrl
+      }
+      const userRes = await axiosPublic.put('/users',googleInfo)
+      console.log(userRes)
+
+      console.log(googleInfo)
+
+    })
+    .catch(err=>{
+      console.log(err)
+    })
+  } 
   
 
   return (
@@ -79,30 +109,44 @@ const SignUp = () => {
 
             <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
               <input
-                {...register("email", { required: true })}
+                {...register("name", { required: true })}
                 className="p-2 mt-8 rounded-xl border"
+                type="text"
+                placeholder="name"
+              />
+              {errors.name && <span className="text-red-500">Email is required</span>}
+              <input
+                {...register("email", { required: true })}
+                className="p-2 rounded-xl border"
                 type="email"
                 placeholder="Email"
               />
               {errors.email && <span className="text-red-500">Email is required</span>}
               <input
                 {...register("photo", { required: true })}
-                className="p-2 mt-8 rounded-xl border"
+                className="p-2 mt-2 rounded-xl border"
                 type="file"
                 accept="image/*"
                 placeholder="photo"
               />
-              {errors.email && <span className="text-red-500">Email is required</span>}
+              {errors.photo && <span className="text-red-500">This field is required</span>}
 
               <select defaultValue='default' {...register("role")} className="p-2 rounded-xl border">
                 <option disabled value="default" defaultValue>Select your role</option>
                 <option value="user">User</option>
                 <option value="seller">Seller</option>
               </select>
-
+              {errors.role && <span className="text-red-500">This field is required</span>}
               <div className="relative">
                 <input
-                  {...register("password", { required: true })}
+                  {...register("password", { required: true,  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },  pattern: {
+                    value: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/,
+                    message:
+                      "Password must have one lowercase, one uppercase, one special character, and one number",
+                  }, })}
                   className="p-2 rounded-xl border w-full"
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
@@ -119,7 +163,38 @@ const SignUp = () => {
                   )}
                 </button>
               </div>
-              {errors.password && <span className="text-red-500">Password is required</span>}
+              {errors.password?.type === "required" && (
+                <span className="text-red-500">Password is required</span>
+              )}
+              {errors.password?.type === "minLength" && (
+                <span className="text-red-500">
+                  Password must be at least 6 characters
+                </span>
+              )}
+              {errors.password?.type === "maxLength" && (
+                <span className="text-red-500">
+                  Password limit is 20 characters
+                </span>
+              )}
+              {errors.password?.type === "pattern" && (
+                <>
+                  {!/(?=.*[a-z])/.test(errors.password.ref.value) && (
+                    <span className="text-red-500">Must include one lowercase letter</span>
+                    
+                  )
+                  
+                  }
+                  {!/(?=.*[A-Z])/.test(errors.password.ref.value) && (
+                    <span className="text-red-500">Must include one uppercase letter</span>
+                  )}
+                  {!/(?=.*[0-9])/.test(errors.password.ref.value) && (
+                    <span className="text-red-500">Must include one number</span>
+                  )}
+                  {!/(?=.*[!@#$&*])/.test(errors.password.ref.value) && (
+                    <span className="text-red-500">Must include one special character</span>
+                  )}
+                </>
+              )}
               <button
                 className="bg-[#7600dc] text-white py-2 rounded-xl hover:scale-105 duration-300 hover:bg-[#a247f1] font-medium"
                 type="submit"
@@ -133,6 +208,7 @@ const SignUp = () => {
               <hr className="border-gray-300" />
             </div>
             <button
+            onClick={handleGoogleSignIn}
               className="bg-white gap-2 border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300 hover:bg-[#7600dc] font-medium"
               aria-label="Login with Google"
             >
