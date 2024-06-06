@@ -129,8 +129,14 @@ const Navbar = () => {
                   <a className="justify-between">Update Profile</a>
                 </li>
                 <li>
-                  <a>Settings</a>
-                </li>
+        <NavLink
+          to="dashboard/"
+          className="m-1"
+          
+        >
+          Dashboard
+        </NavLink>
+      </li>
                 <li>
                   <button onClick={handleSignOut} className="font-bold">
                     Logout

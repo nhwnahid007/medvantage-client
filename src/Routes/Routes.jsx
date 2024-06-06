@@ -5,6 +5,10 @@ import Error from "../Pages/Error/Error";
 import Home from "../Pages/Home/Home/Home";
 import Login from "../Pages/Login/Login";
 import SignUp from "../Pages/SignUp/SignUp";
+import Dashboard from "../Layout/Dashboard";
+import DashboardHome from "../Pages/Dashboard/DashboardHome/DashboardHome";
+import AllUser from "../Pages/Dashboard/AllUser/AllUser";
+
 
 const router = createBrowserRouter([
     {
@@ -26,6 +30,21 @@ const router = createBrowserRouter([
         },
       ]
     },
+    {
+      path: 'dashboard',
+      element: <Dashboard></Dashboard>,
+      children:[
+        {
+          index: true,
+          element: <DashboardHome></DashboardHome>
+
+        },
+        {
+          path: 'manageAllUsers',
+          element: <AllUser></AllUser>
+        }
+      ]
+    }
   ]);
 
   export default router;

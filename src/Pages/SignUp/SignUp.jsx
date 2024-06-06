@@ -282,17 +282,17 @@ const SignUp = () => {
 
             <div className="mt-6 text-sm flex justify-between items-center container-mr">
               <p className=" font-semibold opacity-75 md:mr-0 ">
-                 Or easily sign in here...
+                Have an account? easily sign in here...
               </p>
               <Link
                 to="/login"
-                className="hover:border register text-white bg-[#7600dc] hover:border-gray-400 rounded-xl py-2 px-2 hover:scale-110 hover:bg-[#00157424] font-semibold duration-300"
+                className="hover:border register text-white bg-[#7600dc] hover:border-gray-400 rounded-xl py-2 px-5 mr-4 hover:scale-110 hover:bg-[#00157424] font-semibold duration-300"
               >
                 Login
               </Link>
             </div>
           </div>
-          <div className="md:block hidden w-1/2">
+          <div className="md:block ml-3 hidden w-1/2">
             <img
               className="rounded-2xl max-h-[1600px]"
               src="https://i.ibb.co/z5wkkFg/medvantage.jpg"
