@@ -8,6 +8,8 @@ import SignUp from "../Pages/SignUp/SignUp";
 import Dashboard from "../Layout/Dashboard";
 import DashboardHome from "../Pages/Dashboard/DashboardHome/DashboardHome";
 import AllUser from "../Pages/Dashboard/AllUser/AllUser";
+import UpdateProfile from "../Pages/UpdateProfile/UpdateProfile";
+import PrivateRoute from "./PrivateRoute";
 
 
 const router = createBrowserRouter([
@@ -28,6 +30,10 @@ const router = createBrowserRouter([
           path: '/signUp',
           element: <SignUp></SignUp>
         },
+        {
+          path: '/updateProfile',
+          element:<PrivateRoute> <UpdateProfile></UpdateProfile></PrivateRoute>
+        },
       ]
     },
     {
@@ -39,10 +45,16 @@ const router = createBrowserRouter([
           element: <DashboardHome></DashboardHome>
 
         },
+
+        //admin routes
         {
           path: 'manageAllUsers',
           element: <AllUser></AllUser>
-        }
+        },
+        {
+          path: 'manageCategory',
+          
+        },
       ]
     }
   ]);

@@ -116,7 +116,10 @@ const Navbar = () => {
                 <div className="w-10 rounded-full">
                   <img
                     alt="Tailwind CSS Navbar component"
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                    src={
+                      user?.photoURL ||
+                      "https://i.ibb.co/FHfFTWX/User-Profile-PNG-Free-Download.png"
+                    }
                   />
                 </div>
               </div>
@@ -126,8 +129,17 @@ const Navbar = () => {
                 }`}
               >
                 <li>
-                  <a className="justify-between">Update Profile</a>
-                </li>
+        <NavLink
+          to="/updateProfile"
+          className="m-1"
+          style={({ isActive }) => ({
+            color: isActive ? "#fff" : "#545e6f",
+            background: isActive ? "#7600dc" : "#f0f0f0",
+          })}
+        >
+          Update Profile
+        </NavLink>
+      </li>
                 <li>
         <NavLink
           to="dashboard/"
