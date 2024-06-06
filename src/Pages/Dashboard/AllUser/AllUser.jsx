@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
 import Swal from "sweetalert2";
-import { FaDeleteLeft } from "react-icons/fa6";
+
+import { MdDeleteForever } from "react-icons/md";
 
 const AllUser = () => {
   const axiosSecure = UseAxiosSecure();
@@ -25,7 +26,7 @@ const AllUser = () => {
         confirmButtonText: "Yes, delete it!",
       }).then((result) => {
         if (result.isConfirmed) {
-          axiosSecure.delete(`/users/${_id}`).then((res) => {
+          axiosSecure.delete(`/user/${_id}`).then((res) => {
             if (res.data.deletedCount > 0) {
               refetch();
               Swal.fire({
@@ -39,8 +40,33 @@ const AllUser = () => {
       });
   }
 
-
+  const handleChangeUserRole = (_id, role) => {
+   
+    Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Update it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+            axiosSecure.patch(`/user/${_id}`, { role: role }).then((res) => {
+            if (res.data.modifiedCount > 0) {
+              refetch();
+              Swal.fire({
+                title: "Updated!",
+                text: "Your role has been updated.",
+                icon: "success",
+              });
+            }
+          });
+        }
+      });
   
+  };
+
 
   return (
     <div>
@@ -56,7 +82,8 @@ const AllUser = () => {
               <th>Name</th>
               <th>Email</th>
               <th>Role</th>
-              <th>Action</th>
+              <th>Change Role</th>
+              <th>Remove User</th>
               
             </tr>
           </thead>
@@ -66,8 +93,10 @@ const AllUser = () => {
                 <th>{index + 1}</th>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
+                <td>{user.role}</td>
                 <td>
-                  <select defaultValue="default" className="select select-ghost w-full max-w-xs">
+                  <select onChange={(e) => handleChangeUserRole(user._id, e.target.value)}
+                   defaultValue="default" className="select select-ghost w-full max-w-xs">
                     <option disabled value="default">
                       Change User Role
                     </option>
@@ -77,7 +106,9 @@ const AllUser = () => {
                   </select>
                 </td>
                 <td>
-                    <button className="text-red-500" onClick={()=>handleDeleteUser(user._id)}><span className="flex items-center"><FaDeleteLeft></FaDeleteLeft> Delete</span></button>
+                    <button className="text-red-500" onClick={()=>handleDeleteUser(user._id)}><span className="text-3xl">
+                    <MdDeleteForever />
+                      </span></button>
                 </td>
               </tr>
             ))}
