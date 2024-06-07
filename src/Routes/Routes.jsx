@@ -11,6 +11,7 @@ import AllUser from "../Pages/Dashboard/AllUser/AllUser";
 import UpdateProfile from "../Pages/UpdateProfile/UpdateProfile";
 import PrivateRoute from "./PrivateRoute";
 import CategoryDetails from "../Pages/CategoryDetails/CategoryDetails";
+import Shop from "../Pages/Shop/Shop";
 
 
 const router = createBrowserRouter([
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
           element: <SignUp></SignUp>
         },
         {
+          path: '/shop',
+          element: <Shop></Shop>
+        },
+        {
           path: '/category/:categoryName',
           element: <CategoryDetails></CategoryDetails>
         },
@@ -41,6 +46,8 @@ const router = createBrowserRouter([
         },
       ]
     },
+    //Dashboard 
+
     {
       path: 'dashboard',
       element: <Dashboard></Dashboard>,
