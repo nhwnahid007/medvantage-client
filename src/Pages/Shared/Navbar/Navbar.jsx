@@ -162,7 +162,7 @@ const Navbar = () => {
             to="/login"
             className="m-2 font-bold text-white bg-[#7600dc] btn"
           >
-            Login
+            Join Us
           </NavLink>
         )}
       </div>

@@ -1,11 +1,12 @@
 import AdminSlider from "../AdmlinSlider/AdminSlider";
-import Category from "../CategorySection/Category/Category";
+import Categories from "../Categories/Categories";
+
 
 const Home = () => {
   return (
     <div className="">
       <AdminSlider></AdminSlider>
-      <Category></Category>
+      <Categories></Categories>
     </div>
   );
 };
