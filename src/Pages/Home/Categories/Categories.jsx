@@ -2,9 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import UseAxiosPublic from "../../../Hooks/UseAxiosPublic";
 import SectionHeading from "../../../components/SectionHeading/SectionHeading";
 import Category from "./Category";
+import UseMedicine from "../../../Hooks/UseMedicine";
 
 const Categories = () => {
   const axiosPublic = UseAxiosPublic();
+  const [medicine] = UseMedicine()
+
+  console.log(medicine)
 
   const {
     data: categories = [],
@@ -29,7 +33,7 @@ console.log(categories)
 
      <div className=" mt-20 grid gap-20 justify-evenly grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {
-            categories.map(category=> <Category key={category._id} loading={loading} refetch={refetch} category={category}></Category> )
+            categories.map(category=> <Category key={category._id} medicine={medicine} loading={loading} refetch={refetch} category={category}></Category> )
           }
      </div>
     </div>

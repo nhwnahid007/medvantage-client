@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom";
 
-const Category = ({category}) => {
+const Category = ({category,medicine}) => {
+    console.log(medicine)
+    const filteredMedicine = medicine.filter(
+        (item) => item.category === category.categoryName
+      );
+      console.log(filteredMedicine)
   return (
     <div>
       <>
@@ -15,6 +20,10 @@ const Category = ({category}) => {
                   {category.categoryName}
                 </h5>
               </a>
+
+              <p>
+                {filteredMedicine.length}
+              </p>
 
               <Link
                 to={``}
