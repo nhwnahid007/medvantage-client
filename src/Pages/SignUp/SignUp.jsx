@@ -25,7 +25,8 @@ const SignUp = () => {
   console.log(location);
   const navigate = useNavigate();
 
-  const from = location?.state ? location.state : "/";
+  const from = location.state?.from?.pathname || "/";
+
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -72,7 +73,7 @@ const SignUp = () => {
         const userRes = await axiosPublic.put("/users", userInfo);
         console.log(userRes);
         reset();
-        navigate(from);
+        navigate('/');
       }
     } catch (error) {
       console.error("Error during signup:", error);

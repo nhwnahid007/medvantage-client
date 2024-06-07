@@ -17,11 +17,15 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { signIn, googleSignIn } = useAuth(AuthContext);
 
-  const location = useLocation();
-  console.log(location);
+  
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const from = location?.state ? location.state : "/";
+  const from = location.state?.from?.pathname || "/";
+  console.log('state in the location login page', location.state)
+  console.log('location in the state on login page',location.state)
+
+
   const axiosPublic = UseAxiosPublic();
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);

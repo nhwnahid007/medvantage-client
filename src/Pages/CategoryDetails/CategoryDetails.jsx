@@ -1,14 +1,23 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import UseAxiosPublic from "../../Hooks/UseAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import { FaDollarSign, FaEye } from "react-icons/fa";
 import { BsFileEarmarkMedical } from "react-icons/bs";
 import { MdOutlineFactory } from "react-icons/md";
 import { CiMedicalCross } from "react-icons/ci";
+import Swal from "sweetalert2";
+import useAuth from "../../Hooks/UseAuth";
+import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
+import toast from "react-hot-toast";
 
 const CategoryDetails = () => {
   const axiosPublic = UseAxiosPublic();
   const { categoryName } = useParams();
+
+  const {user}= useAuth()
+  const navigate= useNavigate()
+  const location = useLocation();
+  const axiosSecure =UseAxiosSecure()
 
   console.log(categoryName);
   const { data: categoryDetail = [] } = useQuery({
@@ -20,6 +29,59 @@ const CategoryDetails = () => {
       return res.data;
     },
   });
+
+
+
+
+
+  const handleAddToCart = async medicine => {
+    console.log(medicine,user?.email)
+    if(user && user?.email){
+        //send cart item to the database
+        console.log(user.email,medicine)
+        const cartItem = {
+            medicineId: medicine._id,
+            email: user?.email,
+            name: medicine.name,
+            image: medicine.image,
+            price: medicine.unit_price,
+            discount: medicine.discount,
+
+
+        }
+
+        try {
+            const response = await axiosSecure.post('/carts', cartItem);
+            if (response.data.insertedId) {
+              toast.success(`${medicine.name} added to your cart successfully`);
+              // Refetch the cart to update the cart items count
+              // refetch();
+            }
+          } catch (error) {
+            console.error('Error adding item to cart:', error);
+            // Handle error
+          }
+
+    }
+    else{
+        Swal.fire({
+            title: "You are not logged In",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Please Login!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              //send the user to the login page
+              navigate('/login', { state: { from: location } })
+            }
+          });
+    }
+  }
+
+
 
   return (
     <div>
@@ -39,6 +101,7 @@ const CategoryDetails = () => {
               <th>Company</th>
               <th>mg</th>
               <th>Show Details</th>
+              <th>Add To Cart</th>
             </tr>
           </thead>
           <tbody>
@@ -82,7 +145,9 @@ const CategoryDetails = () => {
                   <button
                     className=""
                     onClick={() =>
-                      document.getElementById(`${categoryDetailData._id}`).showModal()
+                      document
+                        .getElementById(`${categoryDetailData._id}`)
+                        .showModal()
                     }
                   >
                     <FaEye></FaEye>
@@ -141,9 +206,10 @@ const CategoryDetails = () => {
                               </span>
                             </div>
                             <div className="flex gap-1 items-center">
-                            <CiMedicalCross />
+                              <CiMedicalCross />
                               <span>
-                                <strong>Mg:</strong> {categoryDetailData.mg}<small>mg</small>
+                                <strong>Mg:</strong> {categoryDetailData.mg}
+                                <small>mg</small>
                               </span>
                             </div>
                           </div>
@@ -159,6 +225,11 @@ const CategoryDetails = () => {
                       </div>
                     </div>
                   </dialog>
+                </td>
+                <td>
+                  <button onClick={()=>handleAddToCart(categoryDetailData)} className="btn btn-outline border-0  border-b-4 text-[#7600dc]">
+                    Add to Cart
+                  </button>
                 </td>
               </tr>
             ))}
