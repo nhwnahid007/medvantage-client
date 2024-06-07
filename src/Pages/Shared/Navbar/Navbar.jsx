@@ -3,6 +3,7 @@ import { RiMenu3Line, RiCloseLine } from "react-icons/ri";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../Hooks/UseAuth";
 import toast from "react-hot-toast";
+import { FaCartPlus } from "react-icons/fa6";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +41,21 @@ const Navbar = () => {
           })}
         >
           Shop
+        </NavLink>
+      </li>
+      <li>
+        <NavLink
+          to="/cart"
+          className="m-1"
+          style={({ isActive }) => ({
+            color: isActive ? "#fff" : "#545e6f",
+            background: isActive ? "#7600dc" : "#f0f0f0",
+          })}
+        >
+          <button className="btn">
+            <FaCartPlus></FaCartPlus>
+            <div className="badge">+0</div>
+          </button>
         </NavLink>
       </li>
     </>
@@ -129,26 +145,22 @@ const Navbar = () => {
                 }`}
               >
                 <li>
-        <NavLink
-          to="/updateProfile"
-          className="m-1"
-          style={({ isActive }) => ({
-            color: isActive ? "#fff" : "#545e6f",
-            background: isActive ? "#7600dc" : "#f0f0f0",
-          })}
-        >
-          Update Profile
-        </NavLink>
-      </li>
+                  <NavLink
+                    to="/updateProfile"
+                    className="m-1"
+                    style={({ isActive }) => ({
+                      color: isActive ? "#fff" : "#545e6f",
+                      background: isActive ? "#7600dc" : "#f0f0f0",
+                    })}
+                  >
+                    Update Profile
+                  </NavLink>
+                </li>
                 <li>
-        <NavLink
-          to="dashboard/"
-          className="m-1"
-          
-        >
-          Dashboard
-        </NavLink>
-      </li>
+                  <NavLink to="dashboard/" className="m-1">
+                    Dashboard
+                  </NavLink>
+                </li>
                 <li>
                   <button onClick={handleSignOut} className="font-bold">
                     Logout

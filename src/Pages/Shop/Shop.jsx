@@ -25,7 +25,7 @@ const Shop = () => {
               </th>
               <th>Name</th>
               <th>Price</th>
-              <th>Company</th>
+              
               <th>mg</th>
               <th>Show Details</th>
             </tr>
@@ -59,7 +59,7 @@ const Shop = () => {
                     {medicineData.discount}% Discounted
                   </span>
                 </td>
-                <td>{medicineData.company}</td>
+                
                 <td>
                   <span className="font-semibold">
                     {medicineData.mg}{" "}
@@ -71,12 +71,12 @@ const Shop = () => {
                   <button
                     className=""
                     onClick={() =>
-                      document.getElementById("my_modal_1").showModal()
+                      document.getElementById(`${medicineData._id}`).showModal()
                     }
                   >
                     <FaEye></FaEye>
                   </button>
-                  <dialog id="my_modal_1" className="modal">
+                  <dialog id={`${medicineData._id}`} className="modal">
                     <div className="modal-box">
                       <div className="card  bg-base-100 shadow-xl">
                         <figure className="px-10 pt-10">

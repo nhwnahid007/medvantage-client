@@ -82,12 +82,12 @@ const CategoryDetails = () => {
                   <button
                     className=""
                     onClick={() =>
-                      document.getElementById("my_modal_1").showModal()
+                      document.getElementById(`${categoryDetailData._id}`).showModal()
                     }
                   >
                     <FaEye></FaEye>
                   </button>
-                  <dialog id="my_modal_1" className="modal">
+                  <dialog id={`${categoryDetailData._id}`} className="modal">
                     <div className="modal-box">
                       <div className="card  bg-base-100 shadow-xl">
                         <figure className="px-10 pt-10">
