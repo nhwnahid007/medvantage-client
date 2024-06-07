@@ -115,7 +115,7 @@ const Navbar = () => {
               >
                 <div className="w-10 rounded-full">
                   <img
-                    alt="Tailwind CSS Navbar component"
+                    alt="Profile Picture"
                     src={
                       user?.photoURL ||
                       "https://i.ibb.co/FHfFTWX/User-Profile-PNG-Free-Download.png"

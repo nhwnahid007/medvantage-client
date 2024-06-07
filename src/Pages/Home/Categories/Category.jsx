@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 const Category = ({category,medicine}) => {
     console.log(medicine)
     const filteredMedicine = medicine.filter(
-        (item) => item.category === category.categoryName
+        (item) => item.categoryName === category.categoryName
       );
-      console.log(filteredMedicine)
+      
   return (
     <div>
       <>
@@ -26,7 +26,7 @@ const Category = ({category,medicine}) => {
               </p>
 
               <Link
-                to={``}
+                to={`category/${category.categoryName}`}
                 className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center  dark:bg-purple-600 dark:hover:bg-purple-600 dark:focus:ring-purple-800"
               >
                 Explore This category

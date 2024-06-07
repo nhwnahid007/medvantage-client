@@ -10,6 +10,7 @@ import DashboardHome from "../Pages/Dashboard/DashboardHome/DashboardHome";
 import AllUser from "../Pages/Dashboard/AllUser/AllUser";
 import UpdateProfile from "../Pages/UpdateProfile/UpdateProfile";
 import PrivateRoute from "./PrivateRoute";
+import CategoryDetails from "../Pages/CategoryDetails/CategoryDetails";
 
 
 const router = createBrowserRouter([
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
         {
           path: '/signUp',
           element: <SignUp></SignUp>
+        },
+        {
+          path: '/category/:categoryName',
+          element: <CategoryDetails></CategoryDetails>
         },
         {
           path: '/updateProfile',
