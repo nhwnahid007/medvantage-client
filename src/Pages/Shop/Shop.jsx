@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 import toast from "react-hot-toast";
+import useCart from "../../Hooks/useCart";
 
 const Shop = () => {
   const [medicine] = UseMedicine();
@@ -17,6 +18,7 @@ const Shop = () => {
   const navigate= useNavigate()
   const location = useLocation();
   const axiosSecure =UseAxiosSecure()
+  const [,refetch]=useCart()
  
   console.log(medicine);
 
@@ -42,7 +44,7 @@ const Shop = () => {
             if (response.data.insertedId) {
               toast.success(`${medicine.name} added to your cart successfully`);
               // Refetch the cart to update the cart items count
-            //   refetch();
+              refetch();
             }
           } catch (error) {
             console.error('Error adding item to cart:', error);

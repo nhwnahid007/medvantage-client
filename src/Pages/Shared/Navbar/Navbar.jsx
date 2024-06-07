@@ -4,6 +4,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../Hooks/UseAuth";
 import toast from "react-hot-toast";
 import { FaCartPlus } from "react-icons/fa6";
+import useCart from "../../../Hooks/useCart";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +17,8 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const { user, logOut } = useAuth();
+
+  const [cart] = useCart()
 
   const navLinks = (
     <>
@@ -54,7 +57,7 @@ const Navbar = () => {
         >
           <button className="btn">
             <FaCartPlus></FaCartPlus>
-            <div className="badge">+0</div>
+            <div className="badge">+{cart.length}</div>
           </button>
         </NavLink>
       </li>
