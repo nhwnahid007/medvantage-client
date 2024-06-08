@@ -11,64 +11,77 @@ import { useLocation, useNavigate } from "react-router-dom";
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 import toast from "react-hot-toast";
 import useCart from "../../Hooks/useCart";
+import { useState } from "react";
+import { RiDiscountPercentLine } from "react-icons/ri";
 
 const Shop = () => {
   const [medicine] = UseMedicine();
-  const {user}= useAuth()
-  const navigate= useNavigate()
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
-  const axiosSecure =UseAxiosSecure()
-  const [,refetch]=useCart()
- 
+  const axiosSecure = UseAxiosSecure();
+  const [, refetch] = useCart();
+  const [quantities, setQuantities] = useState({});
+
   console.log(medicine);
 
+  const handleAddToCart = async (medicine, quantity) => {
+    console.log(medicine, user?.email);
+    if (user && user?.email) {
+      // Send cart item to the database
+      console.log(user.email, medicine);
+      const cartItem = {
+        medicineId: medicine._id,
+        email: user?.email,
+        name: medicine.name,
+        image: medicine.image,
+        price: medicine.unit_price,
+        discount: medicine.discount,
+        quantity: quantity || 1,
+      };
 
-  const handleAddToCart = async medicine => {
-    console.log(medicine,user?.email)
-    if(user && user?.email){
-        //send cart item to the database
-        console.log(user.email,medicine)
-        const cartItem = {
-            medicineId: medicine._id,
-            email: user?.email,
-            name: medicine.name,
-            image: medicine.image,
-            price: medicine.unit_price,
-            discount: medicine.discount,
-
-
+      try {
+        const response = await axiosSecure.post('/carts', cartItem);
+        if (response.data.insertedId) {
+          toast.success(`${medicine.name} added to your cart successfully`);
+          // Refetch the cart to update the cart items count
+          refetch();
         }
-
-        try {
-            const response = await axiosSecure.post('/carts', cartItem);
-            if (response.data.insertedId) {
-              toast.success(`${medicine.name} added to your cart successfully`);
-              // Refetch the cart to update the cart items count
-              refetch();
-            }
-          } catch (error) {
-            console.error('Error adding item to cart:', error);
-            // Handle error
-          }
-
-    }
-    else{
-        Swal.fire({
-            title: "You are not logged In",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Please Login!"
-          }).then((result) => {
-            if (result.isConfirmed) {
-              //send the user to the login page
-              navigate('/login', { state: { from: location } })
-            }
-          });
+      } catch (error) {
+        console.error('Error adding item to cart:', error);
+        // Handle error
+      }
+    } else {
+      Swal.fire({
+        title: "You are not logged In",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Please Login!"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Send the user to the login page
+          navigate('/login', { state: { from: location } })
+        }
+      });
     }
   }
+
+  const handleIncreaseQuantity = (medicineId) => {
+    setQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [medicineId]: (prevQuantities[medicineId] || 0) + 1
+    }));
+  };
+
+  const handleDecreaseQuantity = (medicineId) => {
+    setQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [medicineId]: Math.max((prevQuantities[medicineId] || 0) - 1, 0)
+    }));
+  };
 
   return (
     <div>
@@ -85,10 +98,10 @@ const Shop = () => {
               </th>
               <th>Name</th>
               <th>Price</th>
-
-              <th>mg</th>
-              <th>Show Details</th>
+              
+              <th>Details</th>
               <th>Add To Cart</th>
+              <th>Quantity</th>
             </tr>
           </thead>
           <tbody>
@@ -107,9 +120,7 @@ const Shop = () => {
                     </div>
                     <div>
                       <div className="font-bold">{medicineData.name}</div>
-                      <div className="text-sm opacity-50">
-                        {medicineData.generic_name}
-                      </div>
+                      
                     </div>
                   </div>
                 </td>
@@ -117,14 +128,10 @@ const Shop = () => {
                   {medicineData.unit_price}$
                   <br />
                   <span className="badge bg-purple-300 font-semibold badge-ghost badge-sm">
-                    {medicineData.discount}% Discounted
+                  <RiDiscountPercentLine />  {medicineData.discount}% 
                   </span>
                 </td>
-
-                <td>
-                  <span className="font-semibold">{medicineData.mg} </span>
-                  <small>mg</small>
-                </td>
+               
                 <td>
                   {/* Open the modal using document.getElementById('ID').showModal() method */}
                   <button
@@ -208,9 +215,16 @@ const Shop = () => {
                   </dialog>
                 </td>
                 <td>
-                  <button onClick={()=>handleAddToCart(medicineData)} className="btn btn-outline border-0  border-b-4 text-[#7600dc]">
+                  <button onClick={() => handleAddToCart(medicineData, quantities[medicineData._id])} className="btn btn-outline border-0  border-b-4 text-[#7600dc]">
                     Add to Cart
                   </button>
+                </td>
+                <td>
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => handleDecreaseQuantity(medicineData._id)} className="btn btn-sm btn-outline text-[#7600dc]">-</button>
+                    <span>{quantities[medicineData._id] || 0}</span>
+                    <button onClick={() => handleIncreaseQuantity(medicineData._id)} className="btn btn-sm btn-outline text-[#7600dc]">+</button>
+                  </div>
                 </td>
               </tr>
             ))}

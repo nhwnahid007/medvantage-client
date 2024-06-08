@@ -55,8 +55,8 @@ const Navbar = () => {
             background: isActive ? "#7600dc" : "#f0f0f0",
           })}
         >
-          <button className="btn">
-            <FaCartPlus></FaCartPlus>
+          <button className="flex font-semibold items-center gap-1">
+            <FaCartPlus className="text-xl"></FaCartPlus>
             <div className="badge">+{cart.length}</div>
           </button>
         </NavLink>

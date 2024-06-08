@@ -12,6 +12,7 @@ import UpdateProfile from "../Pages/UpdateProfile/UpdateProfile";
 import PrivateRoute from "./PrivateRoute";
 import CategoryDetails from "../Pages/CategoryDetails/CategoryDetails";
 import Shop from "../Pages/Shop/Shop";
+import MyCart from "../Pages/MyCart/MyCart";
 
 
 const router = createBrowserRouter([
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
         },
         {
           path: '/cart',
-          element: <Shop></Shop>
+          element: <MyCart></MyCart>
         },
         {
           path: '/category/:categoryName',
