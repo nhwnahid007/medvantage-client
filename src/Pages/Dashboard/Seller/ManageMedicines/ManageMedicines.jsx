@@ -6,6 +6,7 @@ import UseAxiosPublic from "../../../../Hooks/UseAxiosPublic";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import useCategory from "../../../../Hooks/useCategory";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -14,7 +15,9 @@ const ManageMedicines = () => {
   const { user } = useAuth();
   const axiosSecure = UseAxiosSecure();
   const axiosPublic = UseAxiosPublic();
-  const queryClient = useQueryClient();  // Obtain the query client instance
+  const queryClient = useQueryClient();  
+  const [categories]=useCategory()
+  console.log(categories)
 
   const {
     register,
@@ -320,28 +323,35 @@ const ManageMedicines = () => {
                 </p>
               )}
 
-              <label
-                htmlFor="categoryName"
-                className="self-start text-xs font-semibold"
-              >
-                Add Category Name
-              </label>
-              <input
-                {...register("categoryName", {
-                  required: "Category Name is required",
-                })}
-                placeholder="Category Name"
-                id="categoryName"
-                type="text"
-                className={`flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600 ${
-                  errors.categoryName && "border-red-500"
-                }`}
-              />
-              {errors.categoryName && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.categoryName.message}
-                </p>
-              )}
+<label
+      htmlFor="categoryName"
+      className="self-start text-xs font-semibold"
+    >
+      Add Category Name
+    </label>
+    <select
+      {...register("categoryName", {
+        required: "Category Name is required",
+      })}
+      id="categoryName"
+      className={`flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600 ${
+        errors.categoryName && "border-red-500"
+      }`}
+    >
+      <option value="" disabled selected>
+        Select Category Name
+      </option>
+      {categories.map((category, index) => (
+        <option key={index} value={category.categoryName}>
+          {category.categoryName}
+        </option>
+      ))}
+    </select>
+    {errors.categoryName && (
+      <p className="text-red-500 text-xs mt-1">
+        {errors.categoryName.message}
+      </p>
+    )}
 
               <label
                 htmlFor="email"
