@@ -12,12 +12,15 @@ import useAuth from '../../Hooks/UseAuth'
 import useRole from '../../Hooks/useRole'
 import toast from 'react-hot-toast'
 import AdminLinks from '../SidebarNavLinks/AdminLinks'
+import UseAdmin from '../../Hooks/useAdmin'
 
 const Sidebar = () => {
   const { logOut } = useAuth()
   const [isActive, setActive] = useState(false)
   const [role] = useRole()
+  console.log(role)
   const navigate = useNavigate()
+  const[isAdmin] = UseAdmin()
 
   // Sidebar Responsive Handler
   const handleToggle = () => {
@@ -75,7 +78,7 @@ const Sidebar = () => {
             <nav>
               {/* Statistics */}
               {
-                role === 'admin' && (
+                isAdmin && (
                   <>
             <AdminLinks></AdminLinks>
                   </>
