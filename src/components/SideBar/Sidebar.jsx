@@ -13,6 +13,7 @@ import useRole from '../../Hooks/useRole'
 import toast from 'react-hot-toast'
 import AdminLinks from '../SidebarNavLinks/AdminLinks'
 import UseAdmin from '../../Hooks/useAdmin'
+import SellerLinks from '../SidebarNavLinks/SellerLinks'
 
 const Sidebar = () => {
   const { logOut } = useAuth()
@@ -81,6 +82,14 @@ const Sidebar = () => {
                 isAdmin && (
                   <>
             <AdminLinks></AdminLinks>
+                  </>
+                )
+              }
+
+              {
+                role === 'seller' && (
+                  <>
+                  <SellerLinks></SellerLinks>
                   </>
                 )
               }

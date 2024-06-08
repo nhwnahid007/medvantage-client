@@ -14,6 +14,8 @@ import CategoryDetails from "../Pages/CategoryDetails/CategoryDetails";
 import Shop from "../Pages/Shop/Shop";
 import MyCart from "../Pages/MyCart/MyCart";
 import AdminRoute from "./AdminRoutes";
+import ManageMedicines from "../Pages/Dashboard/Seller/ManageMedicines/ManageMedicines";
+import SellerRoute from "./SellerRoute";
 
 
 const router = createBrowserRouter([
@@ -75,6 +77,14 @@ const router = createBrowserRouter([
           path: 'manageCategory',
           
         },
+
+        //seller routes
+        {
+          path: 'manageMedicines',
+          element: <SellerRoute><ManageMedicines></ManageMedicines></SellerRoute>
+          
+        },
+
       ]
     }
   ]);
