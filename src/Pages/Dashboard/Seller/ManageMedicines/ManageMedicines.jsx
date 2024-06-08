@@ -1,22 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useAuth from "../../../../Hooks/UseAuth";
 import UseAxiosSecure from "../../../../Hooks/UseAxiosSecure";
 import SectionHeading from "../../../../components/SectionHeading/SectionHeading";
 import UseAxiosPublic from "../../../../Hooks/UseAxiosPublic";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
-console.log(image_hosting_key);
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
-console.log(image_hosting_api);
 
 const ManageMedicines = () => {
   const { user } = useAuth();
-  console.log(user?.email);
   const axiosSecure = UseAxiosSecure();
   const axiosPublic = UseAxiosPublic();
-
+  const queryClient = useQueryClient();  // Obtain the query client instance
 
   const {
     register,
@@ -24,8 +22,6 @@ const ManageMedicines = () => {
     formState: { errors },
     reset,
   } = useForm();
-
-  //medicine data by seller
 
   const {
     data: medicines = [],
@@ -45,8 +41,6 @@ const ManageMedicines = () => {
     enabled: !!user?.email,
   });
 
-  console.log(medicines);
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -55,56 +49,48 @@ const ManageMedicines = () => {
     return <div>Error fetching medicines</div>;
   }
 
-  //form
-
-
-
-
   const onSubmit = async (data) => {
     try {
-      console.log(data);
+      const imageFile = { image: data.image[0] };
 
-    const imageFile = {image:data.image[0]}
-
-      const res = await axiosPublic.post(image_hosting_api,imageFile , {
+      const res = await axiosPublic.post(image_hosting_api, imageFile, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-      console.log("Image upload response:", res.data);
+      if (res.data.success) {
+        const medicineItem = {
+          name: data.name,
+          short_description: data.short_description,
+          image: res.data.data.display_url,
+          company: data.company,
+          mg: data.mg,
+          unit_price: data.unit_price,
+          discount: data.discount,
+          categoryName: data.categoryName,
+          email: data.email,
+        };
 
-      if(res.data.success){
-        //now send the data 
-
-        const medicineItem ={
-            name: data.name,
-            short_description:data.short_description,
-            image:res.data.data.
-            display_url,
-            company:data.company,
-            mg:data.mg,
-            unit_price:data.unit_price,
-            discount:data.discount,
-            categoryName:data.categoryName,
-            email:data.email,
-
+        const medicineRes = await axiosSecure.post('/medicines', medicineItem);
+        if (medicineRes.data.insertedId) {
+          const modal = document.getElementById("my_modal_5");
+      modal.close();
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Your work has been saved",
+            showConfirmButton: false,
+            timer: 1500,
+            customClass: {
+              container: 'z-50' 
+            }
+          });
+          
+          reset();
+          queryClient.invalidateQueries(['medicines', user?.email]);  // Invalidate the medicines query to refetch data
         }
-        console.log(medicineItem)
-
-        const medicineRes = await axiosSecure.post('/medicines',medicineItem)
-        console.log(medicineRes.data)
-        if(medicineRes.data.insertedId){
-            //show sucess
-            toast.success('data added successfully')
-            reset()
-        }
-
       }
-
-      console.log('with image url',res.data)
-    //   const photoUrl = res.data.data.display_url;
-    //   console.log(photoUrl)
 
       toast.success("Added successfully");
     } catch (error) {
@@ -137,7 +123,7 @@ const ManageMedicines = () => {
           </form>
           <h3 className="font-bold text-center text-lg">Add medicine Here</h3>
 
-          <div className="flex items-center justify-center text-center  dark:text-gray-800">
+          <div className="flex items-center justify-center text-center dark:text-gray-800">
             <form
               onSubmit={handleSubmit(onSubmit)}
               noValidate=""
@@ -156,7 +142,7 @@ const ManageMedicines = () => {
                 id="name"
                 type="text"
                 className={`flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600 ${
-                  errors.name && "border-red-500" // Add red border if there's an error
+                  errors.name && "border-red-500"
                 }`}
               />
               {errors.name && (
@@ -388,7 +374,6 @@ const ManageMedicines = () => {
 
       <div className="overflow-x-auto">
         <table className="table">
-          {/* head */}
           <thead>
             <tr>
               <th>
@@ -400,13 +385,10 @@ const ManageMedicines = () => {
               <th>Category</th>
               <th>Mg</th>
               <th>Company</th>
-
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
-
             {medicines.map((medicine, index) => (
               <tr key={medicine._id}>
                 <th>{index + 1}</th>
