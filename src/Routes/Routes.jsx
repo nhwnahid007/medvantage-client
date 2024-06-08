@@ -13,6 +13,7 @@ import PrivateRoute from "./PrivateRoute";
 import CategoryDetails from "../Pages/CategoryDetails/CategoryDetails";
 import Shop from "../Pages/Shop/Shop";
 import MyCart from "../Pages/MyCart/MyCart";
+import AdminRoute from "./AdminRoutes";
 
 
 const router = createBrowserRouter([
@@ -66,7 +67,9 @@ const router = createBrowserRouter([
         //admin routes
         {
           path: 'manageAllUsers',
-          element: <AllUser></AllUser>
+          element: <AdminRoute>
+            <AllUser></AllUser>
+            </AdminRoute>
         },
         {
           path: 'manageCategory',
