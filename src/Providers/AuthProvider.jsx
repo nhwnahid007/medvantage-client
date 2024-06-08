@@ -49,13 +49,13 @@ const AuthProvider = ({ children }) => {
         axiosPublic.post('/jwt',userInfo)
         .then(res=>{
           if(res.data.token){
-            localStorage.setItem('acess-token',res.data.token)
+            localStorage.setItem('access-token',res.data.token)
           }
         })
       }
       else{
         //do something
-        localStorage.removeItem('acess-token')
+        localStorage.removeItem('access-token')
       }
       setLoading(false);
     });
