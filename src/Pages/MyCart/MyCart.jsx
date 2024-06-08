@@ -121,7 +121,8 @@ const MyCart = () => {
                   </div>
                 </td>
                 
-                <td>${item.price.toFixed(2)}</td>
+                <td>${parseFloat(item.price).toFixed(2)}</td>
+
                 <td>
                   <div className="flex items-center gap-2">
                     <button onClick={() => handleDecreaseQuantity(item)} className="btn btn-sm btn-outline">-</button>
