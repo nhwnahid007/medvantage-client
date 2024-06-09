@@ -18,7 +18,7 @@ const Navbar = () => {
 
   const { user, logOut } = useAuth();
 
-  const [cart] = useCart()
+  const [cart] = useCart();
 
   const navLinks = (
     <>
@@ -60,6 +60,19 @@ const Navbar = () => {
             <div className="badge">+{cart.length}</div>
           </button>
         </NavLink>
+      </li>
+      <li>
+        <details className="dropdown">
+          <summary className="btn btn-md">Language</summary>
+          <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+            <li>
+              <a>English </a>
+            </li>
+            <li>
+              <a>Spanish</a>
+            </li>
+          </ul>
+        </details>
       </li>
     </>
   );

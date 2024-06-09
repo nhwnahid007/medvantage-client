@@ -101,16 +101,92 @@ const ManageCategory = () => {
     }
   };
 
+  const handleAddCategory = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const categoryName = form.name.value;
+    const image = form.image.value;
+    console.log(categoryName, image);
+    const categoryInfo = { categoryName, image };
+    
+    try {
+        const response = await axiosSecure.post('categories', categoryInfo);
+        console.log("Category added successfully:", response.data);
+        if (response.data.insertedId) {
+            toast.success('Added Category');
+            // Reset input fields
+            form.name.value = '';
+            form.image.value = '';
+        }
+        // Handle UI updates or other actions here
+    } catch (error) {
+        console.error("Error adding category:", error);
+        // Handle error UI or other actions here
+    }
+};
+
+
+
   if (loading) {
     return <LoadingSpinner />;
   }
-  
 
   return (
     <div>
       <div className="mt-10">
         <SectionHeading heading={"Manage Categories"} />
       </div>
+
+      {/* You can open the modal using document.getElementById('ID').showModal() method */}
+      <div className="flex items-center justify-center my-10">
+        <button
+          className="btn mx-auto text-white bg-purple-600"
+          onClick={() => document.getElementById("my_modal_3").showModal()}
+        >
+          Add Category
+        </button>
+      </div>
+      <dialog id="my_modal_3" className="modal">
+        <div className="modal-box">
+          <form method="dialog">
+            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+              ✕
+            </button>
+          </form>
+
+          <form className="card-body" onSubmit={handleAddCategory}>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Category Name</span>
+              </label>
+              <input
+                name="name"
+                type="text"
+                placeholder="Category Name"
+                className="input input-bordered"
+                required
+              />
+            </div>
+           
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Image Url</span>
+              </label>
+              <input
+                name="image"
+                type="text"
+                placeholder="Category Image"
+                className="input input-bordered"
+                required
+              />
+            </div>
+
+            <div className="form-control mt-6">
+              <button className="btn bg-purple-700">Add Category</button>
+            </div>
+          </form>
+        </div>
+      </dialog>
 
       <div className="overflow-x-auto">
         <table className="table">
