@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import useCart from "../../Hooks/useCart";
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 import useAuth from "../../Hooks/UseAuth";
+import moment from "moment";
 
 const CheckoutForm = () => {
 
@@ -87,6 +88,20 @@ const CheckoutForm = () => {
     if (paymentIntent.status === 'succeeded'){
       console.log('Transaction Id',paymentIntent.id)
       setTransactionId(paymentIntent.id)
+
+      const payment = {
+        email: user?.email,
+        price: totalPrice,
+        transactionId: paymentIntent.id,
+        date: moment().subtract(10, 'days').calendar(),
+        cartIds: cart.map(item => item._id),
+        medicineItemIds: cart.map(item => item.medicineId),
+        status: 'pending'
+    }
+
+   const res= await axiosSecure.post('/payments',payment);
+   console.log('Payment saved',res)
+
     }
 
   }
