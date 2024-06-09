@@ -17,6 +17,7 @@ import AdminRoute from "./AdminRoutes";
 import ManageMedicines from "../Pages/Dashboard/Seller/ManageMedicines/ManageMedicines";
 import SellerRoute from "./SellerRoute";
 import ManageCategory from "../Pages/Admin/ManageCategory/ManageCategory";
+import Payment from "../Pages/Payment/Payment";
 
 
 
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
         {
           path: '/cart',
           element: <PrivateRoute><MyCart></MyCart></PrivateRoute>
+        },
+        {
+          path: '/payment',
+          element: <PrivateRoute><Payment></Payment></PrivateRoute>
         },
         {
           path: '/category/:categoryName',

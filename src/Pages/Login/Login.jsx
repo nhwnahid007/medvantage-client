@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../Providers/AuthProvider";
@@ -15,6 +15,7 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { signIn, googleSignIn } = useAuth(AuthContext);
 
   
@@ -33,7 +34,7 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
-
+    setIsLoading(true); 
     try {
       console.log(data);
 
@@ -48,12 +49,14 @@ const Login = () => {
 
       // Upload image only if user creation is successful
     } catch (error) {
+      setIsLoading(false);
       console.error("Error during signup:", error);
       toast.error("Error during signup. Please try again later.");
     }
   };
 
   const handleGoogleSignIn = () => {
+    setIsLoading(true);
     googleSignIn()
       .then(async (res) => {
         console.log(res.user);
@@ -76,6 +79,7 @@ const Login = () => {
         toast.success("Sign in successfully");
       })
       .catch((err) => {
+        setIsLoading(false);
         console.log(err);
       });
   };
@@ -133,11 +137,16 @@ const Login = () => {
               {errors.password && (
                 <span className="text-red-500">Password is required</span>
               )}
-              <button
+               <button
                 className="bg-[#7600dc] text-white py-2 rounded-xl hover:scale-105 duration-300 hover:bg-[#a247f1] font-medium"
                 type="submit"
+                disabled={isLoading} 
               >
-                Login
+                {isLoading ? (
+                  <FaSpinner className="animate-spin h-5 w-5 mx-auto" /> // Show spinner if loading
+                ) : (
+                  "Login"
+                )}
               </button>
             </form>
             <div className="mt-6 items-center text-gray-100">

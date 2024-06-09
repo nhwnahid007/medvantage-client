@@ -1,16 +1,17 @@
 import { TbCreditCardPay } from "react-icons/tb";
 import useCart from "../../Hooks/useCart";
 import SectionHeading from "../../components/SectionHeading/SectionHeading";
-import { useNavigate } from "react-router-dom";
+
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 import toast from "react-hot-toast";
 import { MdDeleteForever } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 
 const MyCart = () => {
     
   const [cart, refetch] = useCart();
-  const navigate = useNavigate();
+
   const axiosSecure = UseAxiosSecure();
 
   const totalPrice = cart.reduce((total, item) => {
@@ -69,9 +70,7 @@ const MyCart = () => {
     }
   };
 
-  const handleCheckout = () => {
-    navigate('/checkout');
-  };
+
 
   return (
     <div>
@@ -81,12 +80,20 @@ const MyCart = () => {
 
       <div className="flex items-center justify-evenly md:w-3/5 mx-auto my-5">
         <h2 className="text-center text-4xl">Total: ${totalPrice.toFixed(2)}</h2>
-        <button className="btn text-white bg-green-600" onClick={handleCheckout}>
+       {cart.length ?
+        <Link to='/payment' className="btn text-white bg-green-600" >
           <p className="flex items-center gap-1">
-            <TbCreditCardPay className="text-2xl" />
-            Pay Now
+            <button className="flex items-center" >
+              <TbCreditCardPay className="text-2xl" />
+              Pay Now
+            </button>
           </p>
-        </button>
+        </Link> : 
+        <button disabled className="btn" >
+        <TbCreditCardPay className="text-2xl" />
+        Pay Now
+      </button>
+        }
         <button className="btn bg-red-600 text-white btn-danger" onClick={handleClearCart}>
           Clear Cart
         </button>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import UseAxiosPublic from "../../Hooks/UseAxiosPublic";
@@ -19,6 +19,7 @@ const SignUp = () => {
     reset,
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
   const axiosPublic = UseAxiosPublic();
 
   const location = useLocation();
@@ -36,6 +37,7 @@ const SignUp = () => {
 
   const onSubmit = async (data) => {
     try {
+      setIsRegistering(true);
       console.log(data);
 
       const name = data.name;
@@ -72,10 +74,13 @@ const SignUp = () => {
         console.log(userInfo);
         const userRes = await axiosPublic.put("/users", userInfo);
         console.log(userRes);
+        setIsRegistering(false);
+
         reset();
         navigate('/');
       }
     } catch (error) {
+      setIsRegistering(false);
       console.error("Error during signup:", error);
       toast.error("Error during signup. Please try again later.");
     }
@@ -100,6 +105,7 @@ const SignUp = () => {
         console.log(userRes);
 
         console.log(googleInfo);
+        toast.success('successfully Logged In')
         navigate(from);
       })
       .catch((err) => {
@@ -236,12 +242,16 @@ const SignUp = () => {
                   )}
                 </>
               )}
-              <button
-                className="bg-[#7600dc] text-white py-2 rounded-xl hover:scale-105 duration-300 hover:bg-[#a247f1] font-medium"
-                type="submit"
-              >
-                Sign Up
-              </button>
+             {isRegistering ? (
+                <FaSpinner className="animate-spin  h-5 w-5 mx-auto" /> // Render spinner if registering
+              ) : (
+                <button
+                  className="bg-[#7600dc] text-white py-2 rounded-xl hover:scale-105 duration-300 hover:bg-[#a247f1] font-medium"
+                  type="submit"
+                >
+                  Sign Up
+                </button>
+              )}
             </form>
             <div className="mt-6 items-center text-gray-100">
               <hr className="border-gray-300" />
