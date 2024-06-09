@@ -95,6 +95,7 @@ const CheckoutForm = () => {
 
       const payment = {
         buyerEmail: user?.email,
+        medicineName:cart.map(item=>item.name),
         sellerEmails: cart.map(item => item.sellerEmail),
         price: totalPrice,
         transactionId: paymentIntent.id,
@@ -112,7 +113,7 @@ const CheckoutForm = () => {
       toast.success('Paid Successfully')
     }
 
-    navigate('/invoice')
+    navigate(`/invoice/${payment.transactionId}`)
 
     }
 

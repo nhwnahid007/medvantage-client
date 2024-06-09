@@ -54,7 +54,7 @@ const router = createBrowserRouter([
           element: <PrivateRoute><Payment></Payment></PrivateRoute>
         },
         {
-          path: '/invoice',
+          path: '/invoice/:transactionId',
           element: <Invoice></Invoice>
         },
         {
