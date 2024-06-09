@@ -21,6 +21,7 @@ import Payment from "../Pages/Payment/Payment";
 import Invoice from "../Pages/Payment/Invoice";
 import UserPaymentHistory from "../Pages/Dashboard/User/UserPaymentHistory";
 import PaymentManagement from "../Pages/Admin/PaymentManagement/PaymentManagement";
+import SalesReport from "../Pages/Admin/SalesReport/SalesReport";
 
 
 
@@ -96,7 +97,11 @@ const router = createBrowserRouter([
         },
         {
           path: 'manageCategory',
-         element: <ManageCategory></ManageCategory>
+         element: <AdminRoute><ManageCategory></ManageCategory></AdminRoute>
+        },
+        {
+          path: 'salesReport',
+         element: <AdminRoute><SalesReport></SalesReport></AdminRoute>
         },
         {
           path: 'paymentManagement',

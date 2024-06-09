@@ -99,7 +99,7 @@ const CheckoutForm = () => {
         sellerEmails: cart.map(item => item.sellerEmail),
         price: totalPrice,
         transactionId: paymentIntent.id,
-        date: moment().subtract(10, 'days').calendar(),
+        date: moment().format('MM/DD/YYYY'),
         cartIds: cart.map(item => item._id),
         medicineItemIds: cart.map(item => item.medicineId),
         status: 'pending'
