@@ -37,7 +37,7 @@ const ManageMedicines = () => {
         return [];
       }
       const res = await axiosSecure.get(
-        `/medicines/seller?email=${user.email}`
+        `/medicines/seller?sellerEmail=${user.email}`
       );
       return res.data;
     },
@@ -72,7 +72,7 @@ const ManageMedicines = () => {
           unit_price: data.unit_price,
           discount: data.discount,
           categoryName: data.categoryName,
-          email: data.email,
+          sellerEmail: data.email,
         };
 
         const medicineRes = await axiosSecure.post('/medicines', medicineItem);
@@ -305,7 +305,7 @@ const ManageMedicines = () => {
                     message: "Discount cannot be less than 0",
                   },
                 })}
-                defaultValue={0}
+               
                 id="discount"
                 className={`block w-full p-2 mt-1 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                   errors.discount && "border-red-500"
@@ -330,6 +330,7 @@ const ManageMedicines = () => {
       Add Category Name
     </label>
     <select
+    defaultValue='default'
       {...register("categoryName", {
         required: "Category Name is required",
       })}
@@ -338,7 +339,7 @@ const ManageMedicines = () => {
         errors.categoryName && "border-red-500"
       }`}
     >
-      <option value="" disabled selected>
+      <option value="default" disabled>
         Select Category Name
       </option>
       {categories.map((category, index) => (
