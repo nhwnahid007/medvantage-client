@@ -108,24 +108,22 @@ const ManageCategory = () => {
     const image = form.image.value;
     console.log(categoryName, image);
     const categoryInfo = { categoryName, image };
-    
+
     try {
-        const response = await axiosSecure.post('categories', categoryInfo);
-        console.log("Category added successfully:", response.data);
-        if (response.data.insertedId) {
-            toast.success('Added Category');
-            // Reset input fields
-            form.name.value = '';
-            form.image.value = '';
-        }
-        // Handle UI updates or other actions here
+      const response = await axiosSecure.post("categories", categoryInfo);
+      console.log("Category added successfully:", response.data);
+      if (response.data.insertedId) {
+        toast.success("Added Category");
+        // Reset input fields
+        form.name.value = "";
+        form.image.value = "";
+      }
+      // Handle UI updates or other actions here
     } catch (error) {
-        console.error("Error adding category:", error);
-        // Handle error UI or other actions here
+      console.error("Error adding category:", error);
+      // Handle error UI or other actions here
     }
-};
-
-
+  };
 
   if (loading) {
     return <LoadingSpinner />;
@@ -167,7 +165,7 @@ const ManageCategory = () => {
                 required
               />
             </div>
-           
+
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Image Url</span>
