@@ -15,6 +15,8 @@ import AdminLinks from '../SidebarNavLinks/AdminLinks'
 import UseAdmin from '../../Hooks/useAdmin'
 import SellerLinks from '../SidebarNavLinks/SellerLinks'
 
+import UserLinks from '../SidebarNavLinks/UserLinks'
+
 const Sidebar = () => {
   const { logOut } = useAuth()
   const [isActive, setActive] = useState(false)
@@ -90,6 +92,14 @@ const Sidebar = () => {
                 role === 'seller' && (
                   <>
                   <SellerLinks></SellerLinks>
+                  </>
+                )
+              }
+
+              {
+                role ==='user' && (
+                  <>
+                  <UserLinks></UserLinks>
                   </>
                 )
               }

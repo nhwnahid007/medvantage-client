@@ -32,12 +32,13 @@ const Shop = () => {
       console.log(user.email, medicine);
       const cartItem = {
         medicineId: medicine._id,
-        email: user?.email,
+        buyerEmail: user?.email,
         name: medicine.name,
         image: medicine.image,
         price: medicine.unit_price,
         discount: medicine.discount,
         quantity: quantity || 1,
+        sellerEmail: medicine.sellerEmail,
       };
 
       try {

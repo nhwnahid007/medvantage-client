@@ -94,7 +94,8 @@ const CheckoutForm = () => {
       setTransactionId(paymentIntent.id)
 
       const payment = {
-        email: user?.email,
+        buyerEmail: user?.email,
+        sellerEmails: cart.map(item => item.sellerEmail),
         price: totalPrice,
         transactionId: paymentIntent.id,
         date: moment().subtract(10, 'days').calendar(),

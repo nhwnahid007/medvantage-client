@@ -19,6 +19,7 @@ import SellerRoute from "./SellerRoute";
 import ManageCategory from "../Pages/Admin/ManageCategory/ManageCategory";
 import Payment from "../Pages/Payment/Payment";
 import Invoice from "../Pages/Payment/Invoice";
+import UserPaymentHistory from "../Pages/Dashboard/User/UserPaymentHistory";
 
 
 
@@ -78,6 +79,13 @@ const router = createBrowserRouter([
 
         },
 
+        //user routes 
+
+        {
+          path: 'paymentHistory',
+          element: <PrivateRoute><UserPaymentHistory></UserPaymentHistory></PrivateRoute>
+        },
+
         //admin routes
         {
           path: 'manageAllUsers',
@@ -96,6 +104,7 @@ const router = createBrowserRouter([
           element: <SellerRoute><ManageMedicines></ManageMedicines></SellerRoute>
           
         },
+        
 
       ]
     }
