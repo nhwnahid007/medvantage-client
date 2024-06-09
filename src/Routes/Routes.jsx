@@ -20,6 +20,7 @@ import ManageCategory from "../Pages/Admin/ManageCategory/ManageCategory";
 import Payment from "../Pages/Payment/Payment";
 import Invoice from "../Pages/Payment/Invoice";
 import UserPaymentHistory from "../Pages/Dashboard/User/UserPaymentHistory";
+import PaymentManagement from "../Pages/Admin/PaymentManagement/PaymentManagement";
 
 
 
@@ -96,6 +97,10 @@ const router = createBrowserRouter([
         {
           path: 'manageCategory',
          element: <ManageCategory></ManageCategory>
+        },
+        {
+          path: 'paymentManagement',
+         element: <PaymentManagement></PaymentManagement>
         },
 
         //seller routes
