@@ -18,6 +18,7 @@ import ManageMedicines from "../Pages/Dashboard/Seller/ManageMedicines/ManageMed
 import SellerRoute from "./SellerRoute";
 import ManageCategory from "../Pages/Admin/ManageCategory/ManageCategory";
 import Payment from "../Pages/Payment/Payment";
+import Invoice from "../Pages/Payment/Invoice";
 
 
 
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
         {
           path: '/payment',
           element: <PrivateRoute><Payment></Payment></PrivateRoute>
+        },
+        {
+          path: '/invoice',
+          element: <Invoice></Invoice>
         },
         {
           path: '/category/:categoryName',

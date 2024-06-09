@@ -6,6 +6,7 @@ import useCart from "../../Hooks/useCart";
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 import useAuth from "../../Hooks/UseAuth";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutForm = () => {
 
@@ -13,11 +14,12 @@ const CheckoutForm = () => {
   const [error, setError] = useState('');
   const [clientSecret,setClientSecret]= useState('')
   const [transactionId,setTransactionId]=useState('')
+  const navigate = useNavigate()
 
   const stripe = useStripe();
   const elements = useElements();
   const axiosSecure = UseAxiosSecure()
-  const [cart] = useCart()
+  const [cart,refetch] = useCart()
 
   const totalPrice = cart.reduce((total, item) => {
     const discountedPrice = item.price * (1 - item.discount / 100);
@@ -32,11 +34,13 @@ const CheckoutForm = () => {
 
 
   useEffect( ()=>{
-    axiosSecure.post('/create-payment-intent',{price:totalPrice})
+    if(totalPrice>0){
+      axiosSecure.post('/create-payment-intent',{price:totalPrice})
     .then(res=>{
         console.log(res.data.clientSecret)
         setClientSecret(res.data.clientSecret)
     })
+    }
   },[axiosSecure,totalPrice])
 
   const handleSubmit = async (event) => {
@@ -101,6 +105,13 @@ const CheckoutForm = () => {
 
    const res= await axiosSecure.post('/payments',payment);
    console.log('Payment saved',res)
+   refetch()
+
+    if(res.data?.paymentResult?.insertedId){
+      toast.success('Paid Successfully')
+    }
+
+    navigate('/invoice')
 
     }
 
