@@ -12,11 +12,14 @@ import toast from "react-hot-toast";
 import useCart from "../../Hooks/useCart";
 import { RiDiscountPercentLine } from "react-icons/ri";
 import UseMedicine from "../../Hooks/UseMedicine";
+import { useQuery } from "@tanstack/react-query";
 
 const Shop = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("default");
+  const [currentPage, setCurrentPage] = useState(1); // Pagination state
+  const itemsPerPage = 10; // Items per page
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,20 +28,21 @@ const Shop = () => {
   const [quantities, setQuantities] = useState({});
   const [medicine] = UseMedicine();
 
-  const filteredMedicine = medicine.filter(medicineData =>
-    (medicineData.name && medicineData.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (medicineData.company && medicineData.company.toLowerCase().includes(searchTerm.toLowerCase())) ||
-    (medicineData.generic_name && medicineData.generic_name.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
-
-  const sortedMedicine = [...filteredMedicine].sort((a, b) => {
-    if (sortBy === "priceLowToHigh") {
-      return a.unit_price - b.unit_price;
-    } else if (sortBy === "priceHighToLow") {
-      return b.unit_price - a.unit_price;
-    }
-    return 0;
+  const { data: count = "", } = useQuery({
+    queryKey: ["count", user?.email],
+    queryFn: async () => {
+      const { data } = await axiosSecure.get('/medicinesCount');
+      return data.count;
+    },
   });
+  console.log(count)
+
+  const numberOfPages = Math.ceil(count / itemsPerPage);
+  console.log(numberOfPages)
+
+  const pages = [...Array(numberOfPages).keys()];
+
+  console.log(pages)
 
   const handleSearch = event => {
     setSearchQuery(event.target.value);
@@ -46,10 +50,12 @@ const Shop = () => {
 
   const handleSearchButtonClick = () => {
     setSearchTerm(searchQuery);
+    setCurrentPage(1); // Reset to the first page when a new search is performed
   };
 
   const handleSortChange = event => {
     setSortBy(event.target.value);
+    setCurrentPage(1); // Reset to the first page when the sort order is changed
   };
 
   const handleAddToCart = async (medicine, quantity) => {
@@ -105,6 +111,32 @@ const Shop = () => {
     }));
   };
 
+  // Filter and sort the medicines
+  const filteredMedicine = medicine.filter(medicineData =>
+    (medicineData.name && medicineData.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (medicineData.company && medicineData.company.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (medicineData.generic_name && medicineData.generic_name.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  const sortedMedicine = [...filteredMedicine].sort((a, b) => {
+    if (sortBy === "priceLowToHigh") {
+      return a.unit_price - b.unit_price;
+    } else if (sortBy === "priceHighToLow") {
+      return b.unit_price - a.unit_price;
+    }
+    return 0;
+  });
+
+  // Pagination: Get current items
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = sortedMedicine.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Pagination: handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div>
       <SectionHeading heading={"All medicines"}></SectionHeading>
@@ -118,7 +150,7 @@ const Shop = () => {
         Search
       </button>
       <select value={sortBy} onChange={handleSortChange}>
-        <option value="default">Short By Default</option>
+        <option value="default">Sort By Default</option>
         <option value="priceLowToHigh">Price: Low to High</option>
         <option value="priceHighToLow">Price: High to Low</option>
       </select>
@@ -139,9 +171,9 @@ const Shop = () => {
             </tr>
           </thead>
           <tbody>
-            {sortedMedicine.map((medicineData, index) => (
+            {currentItems.map((medicineData, index) => (
               <tr key={medicineData._id}>
-                <th>{index + 1}</th>
+                <th>{index + 1 + indexOfFirstItem}</th>
                 <td>
                   <div className="flex items-center gap-3">
                     <div className="avatar">
@@ -261,6 +293,17 @@ const Shop = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="pagination flex justify-center items-center mt-10">
+        {pages.map((pageNumber) => (
+          <button
+            key={pageNumber}
+            onClick={() => handlePageChange(pageNumber + 1)}
+            className={`btn mx-1 ${currentPage === pageNumber + 1 ? "btn-active bg-purple-600" : ""}`}
+          >
+            {pageNumber + 1}
+          </button>
+        ))}
       </div>
     </div>
   );
