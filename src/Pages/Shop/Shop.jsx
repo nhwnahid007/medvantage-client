@@ -160,7 +160,7 @@ const Shop = () => {
                 <td className="font-bold">
                   {medicineData.unit_price}$
                   <br />
-                  <span className="badge bg-purple-300 font-semibold badge-ghost badge-sm">
+                  <span className="badge text-gray-800 font-bold bg-purple-300 badge-ghost badge-sm">
                     <RiDiscountPercentLine /> {medicineData.discount}%
                   </span>
                 </td>
@@ -197,7 +197,7 @@ const Shop = () => {
                               <FaDollarSign></FaDollarSign>{" "}
                               <span>
                                 <strong>Discount :</strong>{" "}
-                                {medicineData.unit_price} %
+                                {medicineData.discount} %
                               </span>
                             </div>
                             <div className="flex gap-1 items-center">
