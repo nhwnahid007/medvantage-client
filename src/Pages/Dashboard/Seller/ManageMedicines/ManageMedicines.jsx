@@ -66,6 +66,8 @@ const ManageMedicines = () => {
       if (res.data.success) {
         const medicineItem = {
           name: data.name,
+          generic_name: data.generic_name,
+          
           short_description: data.short_description,
           image: res.data.data.display_url,
           company: data.company,
@@ -376,7 +378,7 @@ const ManageMedicines = () => {
                 type="submit"
                 className="flex items-center justify-center h-12 px-6 mt-8 text-sm  rounded btn font-bold "
               >
-                Update Info
+                Add Info
               </button>
             </form>
           </div>

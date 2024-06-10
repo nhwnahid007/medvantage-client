@@ -2,6 +2,16 @@
 
 
 "MedVantage: Your premier destination for all things health and wellness. Discover a vast selection of top-quality medicines, supplements, and healthcare essentials, all conveniently available at your fingertips. With MedVantage, your journey to better health begins here."
+-**Email and Password**- 
+## Seller--> Email: seller@gmail.com 
+## Seller--> Password: Seller@123456 
+
+## Admin--> Password: admin@123456 
+## Admin--> Password: Admin@123456 
+
+
+
+
 
  ## [MedVantage](https://medvantage-mv.web.app)
 

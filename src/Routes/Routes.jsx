@@ -25,116 +25,167 @@ import SalesReport from "../Pages/Admin/SalesReport/SalesReport";
 import SellerPaymentHistory from "../Pages/Dashboard/Seller/PaymentHistory/SellerPaymentHistory";
 import RequestAdvertise from "../Pages/Dashboard/Seller/RequestAdvertised/RequestAdvertise";
 import ManageBannerAdvertize from "../Pages/Admin/ManageBannerAdvertize/ManageBannerAdvertize";
-
-
+import UpdateMedicines from "../Pages/Admin/UpdateMedicines/UpdateMedicines";
 
 const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Main></Main>,
-      errorElement:<Error></Error> ,
-      children: [
-        {
-            path: '/',
-            element: <Home></Home>
-        },
-        {
-          path: '/login',
-          element: <Login></Login>
-        },
-        {
-          path: '/signUp',
-          element: <SignUp></SignUp>
-        },
-        {
-          path: '/shop',
-          element: <Shop></Shop>
-        },
-        {
-          path: '/cart',
-          element: <PrivateRoute><MyCart></MyCart></PrivateRoute>
-        },
-        {
-          path: '/payment',
-          element: <PrivateRoute><Payment></Payment></PrivateRoute>
-        },
-        {
-          path: '/invoice/:transactionId',
-          element: <Invoice></Invoice>
-        },
-        {
-          path: '/category/:categoryName',
-          element: <CategoryDetails></CategoryDetails>
-        },
-        {
-          path: '/updateProfile',
-          element:<PrivateRoute> <UpdateProfile></UpdateProfile></PrivateRoute>
-        },
-      ]
-    },
-    //Dashboard 
+  {
+    path: "/",
+    element: <Main></Main>,
+    errorElement: <Error></Error>,
+    children: [
+      {
+        path: "/",
+        element: <Home></Home>,
+      },
+      {
+        path: "/login",
+        element: <Login></Login>,
+      },
+      {
+        path: "/signUp",
+        element: <SignUp></SignUp>,
+      },
+      {
+        path: "/shop",
+        element: <Shop></Shop>,
+      },
+      {
+        path: "/cart",
+        element: (
+          <PrivateRoute>
+            <MyCart></MyCart>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/payment",
+        element: (
+          <PrivateRoute>
+            <Payment></Payment>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "/invoice/:transactionId",
+        element: <Invoice></Invoice>,
+      },
+      {
+        path: "/category/:categoryName",
+        element: <CategoryDetails></CategoryDetails>,
+      },
+      {
+        path: "/updateProfile",
+        element: (
+          <PrivateRoute>
+            {" "}
+            <UpdateProfile></UpdateProfile>
+          </PrivateRoute>
+        ),
+      },
+    ],
+  },
+  //Dashboard
 
-    {
-      path: 'dashboard',
-      element: <Dashboard></Dashboard>,
-      children:[
-        {
-          index: true,
-          element: <DashboardHome></DashboardHome>
+  {
+    path: "dashboard",
+    element: <Dashboard></Dashboard>,
+    children: [
+      {
+        index: true,
+        element: <DashboardHome></DashboardHome>,
+      },
 
-        },
+      //user routes
 
-        //user routes 
+      {
+        path: "paymentHistory",
+        element: (
+          <PrivateRoute>
+            <UserPaymentHistory></UserPaymentHistory>
+          </PrivateRoute>
+        ),
+      },
 
-        {
-          path: 'paymentHistory',
-          element: <PrivateRoute><UserPaymentHistory></UserPaymentHistory></PrivateRoute>
-        },
-
-        //admin routes
-        {
-          path: 'manageAllUsers',
-          element: <AdminRoute>
+      //admin routes
+      {
+        path: "manageAllUsers",
+        element: (
+          <AdminRoute>
             <AllUser></AllUser>
-            </AdminRoute>
-        },
-        {
-          path: 'manageCategory',
-         element: <AdminRoute><ManageCategory></ManageCategory></AdminRoute>
-        },
-        {
-          path: 'salesReport',
-         element: <AdminRoute><SalesReport></SalesReport></AdminRoute>
-        },
-        {
-          path: 'paymentManagement',
-         element: <AdminRoute><PaymentManagement></PaymentManagement></AdminRoute>
-        },
-        {
-          path: 'manageBannerAdvertize',
-         element: <AdminRoute><ManageBannerAdvertize></ManageBannerAdvertize></AdminRoute>
-        },
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manageCategory",
+        element: (
+          <AdminRoute>
+            <ManageCategory></ManageCategory>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "salesReport",
+        element: (
+          <AdminRoute>
+            <SalesReport></SalesReport>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "paymentManagement",
+        element: (
+          <AdminRoute>
+            <PaymentManagement></PaymentManagement>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manageBannerAdvertize",
+        element: (
+          <AdminRoute>
+            <ManageBannerAdvertize></ManageBannerAdvertize>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "updateMedicine/:id",
+        element: (
+          <AdminRoute>
+           <UpdateMedicines></UpdateMedicines>
+          </AdminRoute>
+        )
+      }
+      
+   ,
+    
 
-        //seller routes
-        {
-          path: 'manageMedicines',
-          element: <SellerRoute><ManageMedicines></ManageMedicines></SellerRoute>
-          
-        },
-        {
-          path: 'sellerPaymentHistory',
-          element: <SellerRoute><SellerPaymentHistory></SellerPaymentHistory></SellerRoute>
-          
-        },
-        {
-          path: 'requestAvertise',
-          element: <SellerRoute><RequestAdvertise></RequestAdvertise></SellerRoute>
-          
-        },
-        
+      //seller routes
+      {
+        path: "manageMedicines",
+        element: (
+          <SellerRoute>
+            <ManageMedicines></ManageMedicines>
+          </SellerRoute>
+        ),
+      },
+      {
+        path: "sellerPaymentHistory",
+        element: (
+          <SellerRoute>
+            <SellerPaymentHistory></SellerPaymentHistory>
+          </SellerRoute>
+        ),
+      },
+      {
+        path: "requestAvertise",
+        element: (
+          <SellerRoute>
+            <RequestAdvertise></RequestAdvertise>
+          </SellerRoute>
+        ),
+      },
+    ],
+  },
+]);
 
-      ]
-    }
-  ]);
-
-  export default router;
+export default router;
