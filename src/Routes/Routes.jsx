@@ -23,6 +23,7 @@ import UserPaymentHistory from "../Pages/Dashboard/User/UserPaymentHistory";
 import PaymentManagement from "../Pages/Admin/PaymentManagement/PaymentManagement";
 import SalesReport from "../Pages/Admin/SalesReport/SalesReport";
 import SellerPaymentHistory from "../Pages/Dashboard/Seller/PaymentHistory/SellerPaymentHistory";
+import RequestAdvertise from "../Pages/Dashboard/Seller/RequestAdvertised/RequestAdvertise";
 
 
 
@@ -118,6 +119,11 @@ const router = createBrowserRouter([
         {
           path: 'sellerPaymentHistory',
           element: <SellerRoute><SellerPaymentHistory></SellerPaymentHistory></SellerRoute>
+          
+        },
+        {
+          path: 'requestAvertise',
+          element: <SellerRoute><RequestAdvertise></RequestAdvertise></SellerRoute>
           
         },
         

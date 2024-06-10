@@ -63,7 +63,7 @@ const Navbar = () => {
       </li>
       <li>
         <details className="dropdown">
-          <summary className="btn btn-md">Language</summary>
+          <summary className="btn btn-sm m-1 p-1">Language</summary>
           <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
             <li>
               <a>English </a>
