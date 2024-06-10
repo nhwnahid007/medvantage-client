@@ -24,6 +24,7 @@ import PaymentManagement from "../Pages/Admin/PaymentManagement/PaymentManagemen
 import SalesReport from "../Pages/Admin/SalesReport/SalesReport";
 import SellerPaymentHistory from "../Pages/Dashboard/Seller/PaymentHistory/SellerPaymentHistory";
 import RequestAdvertise from "../Pages/Dashboard/Seller/RequestAdvertised/RequestAdvertise";
+import ManageBannerAdvertize from "../Pages/Admin/ManageBannerAdvertize/ManageBannerAdvertize";
 
 
 
@@ -107,7 +108,11 @@ const router = createBrowserRouter([
         },
         {
           path: 'paymentManagement',
-         element: <PaymentManagement></PaymentManagement>
+         element: <AdminRoute><PaymentManagement></PaymentManagement></AdminRoute>
+        },
+        {
+          path: 'manageBannerAdvertize',
+         element: <AdminRoute><ManageBannerAdvertize></ManageBannerAdvertize></AdminRoute>
         },
 
         //seller routes

@@ -45,6 +45,7 @@ const RequestAdvertise = () => {
   
         if (res.data.success) {
           const adItem = {
+            name: data.name,
             description: data.description,
             image: res.data.data.display_url,
             email: user?.email,
@@ -82,7 +83,7 @@ const RequestAdvertise = () => {
     <div>
       <div className="flex items-center justify-center">
         <button
-          className="btn"
+          className="btn bg-purple-600 text-white my-10"
           onClick={() => document.getElementById("my_modal_5").showModal()}
         >
           Add new Medicine
@@ -105,6 +106,26 @@ const RequestAdvertise = () => {
               action=""
               className="flex bg-purple-200 flex-col w-full max-w-lg p-12 rounded shadow-lg dark:text-gray-800"
             >
+              <label
+                htmlFor="description"
+                className="self-start text-xs font-semibold"
+              >
+                Name
+              </label>
+              <input
+                {...register("name", { required: "Name is required" })}
+                placeholder="Name"
+                id="name"
+                type="text"
+                className={`flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600 ${
+                  errors.name && "border-red-500"
+                }`}
+              />
+              {errors.name && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.name.message}
+                </p>
+              )}
               <label
                 htmlFor="description"
                 className="self-start text-xs font-semibold"
@@ -170,6 +191,8 @@ const RequestAdvertise = () => {
                   <input type="checkbox" className="checkbox" />
                 </label>
               </th>
+              <th>image</th>
+              <th>Name</th>
               <th>Description</th>
               <th>Status</th>
 
@@ -191,10 +214,12 @@ const RequestAdvertise = () => {
                         <img src={ad.image} alt="Ad Image" />
                       </div>
                     </div>
-                    <span>{ad.description}</span>
+                    
                   </div>
                 </td>
-                <td>{ad.email}</td>
+                <td>{ad.name}</td>
+                <td>{ad.description}</td>
+               
                 <td>{ad.status}</td>
               </tr>
             ))}
