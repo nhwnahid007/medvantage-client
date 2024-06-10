@@ -1,35 +1,59 @@
+import { useState } from "react";
 import { FaDollarSign, FaEye } from "react-icons/fa";
-import UseMedicine from "../../Hooks/UseMedicine";
 import { BsFileEarmarkMedical } from "react-icons/bs";
 import { MdOutlineFactory } from "react-icons/md";
 import { CiMedicalCross } from "react-icons/ci";
 import SectionHeading from "../../components/SectionHeading/SectionHeading";
 import useAuth from "../../Hooks/UseAuth";
-
 import Swal from "sweetalert2";
 import { useLocation, useNavigate } from "react-router-dom";
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 import toast from "react-hot-toast";
 import useCart from "../../Hooks/useCart";
-import { useState } from "react";
 import { RiDiscountPercentLine } from "react-icons/ri";
+import UseMedicine from "../../Hooks/UseMedicine";
 
 const Shop = () => {
-  const [medicine] = UseMedicine();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("default");
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const axiosSecure = UseAxiosSecure();
   const [, refetch] = useCart();
   const [quantities, setQuantities] = useState({});
+  const [medicine] = UseMedicine();
 
-  console.log(medicine);
+  const filteredMedicine = medicine.filter(medicineData =>
+    (medicineData.name && medicineData.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (medicineData.company && medicineData.company.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (medicineData.generic_name && medicineData.generic_name.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  const sortedMedicine = [...filteredMedicine].sort((a, b) => {
+    if (sortBy === "priceLowToHigh") {
+      return a.unit_price - b.unit_price;
+    } else if (sortBy === "priceHighToLow") {
+      return b.unit_price - a.unit_price;
+    }
+    return 0;
+  });
+
+  const handleSearch = event => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchButtonClick = () => {
+    setSearchTerm(searchQuery);
+  };
+
+  const handleSortChange = event => {
+    setSortBy(event.target.value);
+  };
 
   const handleAddToCart = async (medicine, quantity) => {
-    console.log(medicine, user?.email);
     if (user && user?.email) {
-      // Send cart item to the database
-      console.log(user.email, medicine);
       const cartItem = {
         medicineId: medicine._id,
         buyerEmail: user?.email,
@@ -45,12 +69,10 @@ const Shop = () => {
         const response = await axiosSecure.post('/carts', cartItem);
         if (response.data.insertedId) {
           toast.success(`${medicine.name} added to your cart successfully`);
-          // Refetch the cart to update the cart items count
           refetch();
         }
       } catch (error) {
         console.error('Error adding item to cart:', error);
-        // Handle error
       }
     } else {
       Swal.fire({
@@ -63,7 +85,6 @@ const Shop = () => {
         confirmButtonText: "Please Login!"
       }).then((result) => {
         if (result.isConfirmed) {
-          // Send the user to the login page
           navigate('/login', { state: { from: location } })
         }
       });
@@ -87,9 +108,22 @@ const Shop = () => {
   return (
     <div>
       <SectionHeading heading={"All medicines"}></SectionHeading>
-      <div className="overflow-x-auto">
+      <input
+        type="text"
+        placeholder="Search medicine..."
+        value={searchQuery}
+        onChange={handleSearch}
+      />
+      <button onClick={handleSearchButtonClick} className="btn bg-[#7600dc] text-white mx-20">
+        Search
+      </button>
+      <select value={sortBy} onChange={handleSortChange}>
+        <option value="default">Short By Default</option>
+        <option value="priceLowToHigh">Price: Low to High</option>
+        <option value="priceHighToLow">Price: High to Low</option>
+      </select>
+      <div className="overflow-x-auto my-10">
         <table className="table">
-          {/* head */}
           <thead>
             <tr>
               <th>
@@ -99,14 +133,13 @@ const Shop = () => {
               </th>
               <th>Name</th>
               <th>Price</th>
-              
               <th>Details</th>
               <th>Add To Cart</th>
               <th>Quantity</th>
             </tr>
           </thead>
           <tbody>
-            {medicine.map((medicineData, index) => (
+            {sortedMedicine.map((medicineData, index) => (
               <tr key={medicineData._id}>
                 <th>{index + 1}</th>
                 <td>
@@ -121,7 +154,6 @@ const Shop = () => {
                     </div>
                     <div>
                       <div className="font-bold">{medicineData.name}</div>
-                      
                     </div>
                   </div>
                 </td>
@@ -129,12 +161,10 @@ const Shop = () => {
                   {medicineData.unit_price}$
                   <br />
                   <span className="badge bg-purple-300 font-semibold badge-ghost badge-sm">
-                  <RiDiscountPercentLine />  {medicineData.discount}% 
+                    <RiDiscountPercentLine /> {medicineData.discount}%
                   </span>
                 </td>
-               
                 <td>
-                  {/* Open the modal using document.getElementById('ID').showModal() method */}
                   <button
                     className=""
                     onClick={() =>
