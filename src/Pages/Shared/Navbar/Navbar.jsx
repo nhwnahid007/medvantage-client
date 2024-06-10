@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { RiMenu3Line, RiCloseLine } from "react-icons/ri";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../../../Hooks/UseAuth";
 import toast from "react-hot-toast";
 import { FaCartPlus } from "react-icons/fa6";
@@ -130,7 +130,9 @@ const Navbar = () => {
             {navLinks}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">MedVantage</a>
+        <Link to='/'>
+            <span className='text-3xl font-bold opacity-80'> <span className='text-[#7600dc]'>Med</span>vantage</span>
+            </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{navLinks}</ul>

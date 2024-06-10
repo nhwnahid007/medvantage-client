@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useCategory from "../../../../Hooks/useCategory";
+import moment from "moment";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -73,6 +74,7 @@ const ManageMedicines = () => {
           discount: data.discount,
           categoryName: data.categoryName,
           sellerEmail: data.email,
+          date: moment().format('MM/DD/YYYY'),
         };
 
         const medicineRes = await axiosSecure.post('/medicines', medicineItem);

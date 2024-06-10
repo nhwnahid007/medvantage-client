@@ -86,7 +86,7 @@ const RequestAdvertise = () => {
           className="btn bg-purple-600 text-white my-10"
           onClick={() => document.getElementById("my_modal_5").showModal()}
         >
-          Add new Medicine
+          Add Medicine Ads 
         </button>
       </div>
 

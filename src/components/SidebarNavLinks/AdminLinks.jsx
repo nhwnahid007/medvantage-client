@@ -1,4 +1,5 @@
-import { BsGraphUp } from "react-icons/bs";
+
+import { FaDollarSign } from "react-icons/fa";
 import { FcSalesPerformance } from "react-icons/fc";
 import { LiaUsersCogSolid } from "react-icons/lia";
 import { MdOutlinePayment } from "react-icons/md";
@@ -18,9 +19,9 @@ const AdminLinks = () => {
           }`
         }
       >
-        <BsGraphUp className="w-5 h-5" />
+        <FaDollarSign className="w-5 h-5" />
 
-        <span className="mx-4 font-medium">Statistics</span>
+        <span className="mx-4 font-medium">Total Revenue</span>
       </NavLink>
 
       {/* Manage All Users */}

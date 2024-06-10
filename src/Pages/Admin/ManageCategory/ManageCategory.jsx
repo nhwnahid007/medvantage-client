@@ -66,14 +66,17 @@ const ManageCategory = () => {
         const medicineItem = {
           name: data.name,
           short_description: data.short_description,
+          generic_name: data.generic_name,
           image: res.data.data.display_url,
           company: data.company,
           mg: data.mg,
           unit_price: data.unit_price,
           discount: data.discount,
           categoryName: data.categoryName,
-          email: data.email,
+          sellerEmail: data.email,
         };
+
+        console.log(medicineItem)
 
         const medicineRes = await axiosSecure.patch("/medicines", medicineItem);
         if (medicineRes.data.insertedId) {
@@ -273,7 +276,7 @@ const ManageCategory = () => {
                             {...register("name", {
                               required: "Medicine Name is required",
                             })}
-                            defaultValue={medicine.name}
+                            placeholder={medicine.name}
                             id="name"
                             type="text"
                             className={`flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600 ${
@@ -296,7 +299,7 @@ const ManageCategory = () => {
                             {...register("generic_name", {
                               required: "Generic Name is required",
                             })}
-                            defaultValue={medicine.generic_name}
+                            placeholder={medicine.generic_name}
                             id="generic_name"
                             type="text"
                             className={`flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600 ${
@@ -319,7 +322,7 @@ const ManageCategory = () => {
                             {...register("short_description", {
                               required: "Short Description is required",
                             })}
-                            defaultValue={medicine.short_description}
+                            placeholder={medicine.short_description}
                             id="short_description"
                             type="text"
                             className={`flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600 ${
@@ -364,7 +367,7 @@ const ManageCategory = () => {
                             {...register("company", {
                               required: "Company is required",
                             })}
-                            defaultValue={medicine.company}
+                            placeholder={medicine.company}
                             id="company"
                             type="text"
                             className={`flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600 ${
@@ -392,7 +395,7 @@ const ManageCategory = () => {
                               },
                             })}
                             id="mg"
-                            defaultValue={medicine.mg}
+                           placeholder={medicine.mg}
                             type="number"
                             className={`flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600 ${
                               errors.mg && "border-red-500"
@@ -418,7 +421,7 @@ const ManageCategory = () => {
                                 message: "Price cannot be less than 0",
                               },
                             })}
-                            defaultValue={medicine.unit_price}
+                            placeholder={medicine.unit_price}
                             id="unit_price"
                             type="number"
                             className={`flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600 ${
@@ -445,7 +448,7 @@ const ManageCategory = () => {
                                 message: "Discount cannot be less than 0",
                               },
                             })}
-                            defaultValue={medicine.discount}
+                            placeholder={medicine.discount}
                             id="discount"
                             className={`block w-full p-2 mt-1 border border-gray-300 rounded dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                               errors.discount && "border-red-500"
@@ -474,7 +477,7 @@ const ManageCategory = () => {
                               required: "Category Name is required",
                             })}
                             id="categoryName"
-                            defaultValue={medicine.categoryName}
+                            placeholder={medicine.categoryName}
                             className={`flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600 ${
                               errors.categoryName && "border-red-500"
                             }`}
@@ -502,8 +505,7 @@ const ManageCategory = () => {
                           </label>
                           <input
                             {...register("email")}
-                            defaultValue={medicine.email}
-                            readOnly
+                            placeholder={medicine.sellerEmail}
                             id="email"
                             type="email"
                             className="flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600"
@@ -511,6 +513,7 @@ const ManageCategory = () => {
 
                           <button
                             type="submit"
+                            
                             className="flex items-center justify-center h-12 px-6 mt-8 text-sm  rounded btn font-bold "
                           >
                             Update Info
