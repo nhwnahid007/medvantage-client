@@ -1,21 +1,18 @@
 import { TbCreditCardPay } from "react-icons/tb";
 import useCart from "../../Hooks/useCart";
 import SectionHeading from "../../components/SectionHeading/SectionHeading";
-
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 import toast from "react-hot-toast";
 import { MdDeleteForever } from "react-icons/md";
 import { Link } from "react-router-dom";
-
+import { Helmet } from "react-helmet-async";
 
 const MyCart = () => {
-    
   const [cart, refetch] = useCart();
-
   const axiosSecure = UseAxiosSecure();
 
   const totalPrice = cart.reduce((total, item) => {
-    const discountedPrice = item.price * (1 - item.discount / 100);
+    const discountedPrice = parseFloat(item.price) * (1 - item.discount / 100);
     const itemTotal = discountedPrice * item.quantity;
     return total + itemTotal;
   }, 0);
@@ -70,30 +67,32 @@ const MyCart = () => {
     }
   };
 
-
-
   return (
     <div>
+      <Helmet>
+        <title>My cart</title>
+      </Helmet>
       <div className="mt-10">
         <SectionHeading heading={`My Cart: ${cart.length}`}></SectionHeading>
       </div>
 
       <div className="flex items-center justify-evenly md:w-3/5 mx-auto my-5">
         <h2 className="text-center text-4xl">Total: ${totalPrice.toFixed(2)}</h2>
-       {cart.length ?
-        <Link to='/payment' className="btn text-white bg-green-600" >
-          <p className="flex items-center gap-1">
-            <button className="flex items-center" >
-              <TbCreditCardPay className="text-2xl" />
-              Pay Now
-            </button>
-          </p>
-        </Link> : 
-        <button disabled className="btn" >
-        <TbCreditCardPay className="text-2xl" />
-        Pay Now
-      </button>
-        }
+        {cart.length ? (
+          <Link to='/payment' className="btn text-white bg-green-600">
+            <p className="flex items-center gap-1">
+              <button className="flex items-center">
+                <TbCreditCardPay className="text-2xl" />
+                Pay Now
+              </button>
+            </p>
+          </Link>
+        ) : (
+          <button disabled className="btn">
+            <TbCreditCardPay className="text-2xl" />
+            Pay Now
+          </button>
+        )}
         <button className="btn bg-red-600 text-white btn-danger" onClick={handleClearCart}>
           Clear Cart
         </button>
@@ -104,8 +103,8 @@ const MyCart = () => {
           <thead>
             <tr>
               <th>Name</th>
-              
               <th>Price Per Unit</th>
+              
               <th>Quantity</th>
               <th>Total Price</th>
               <th>Actions</th>
@@ -127,7 +126,6 @@ const MyCart = () => {
                     </div>
                   </div>
                 </td>
-                
                 <td>${parseFloat(item.price).toFixed(2)}</td>
 
                 <td>
@@ -137,7 +135,7 @@ const MyCart = () => {
                     <button onClick={() => handleIncreaseQuantity(item)} className="btn btn-sm btn-outline">+</button>
                   </div>
                 </td>
-                <td>${(item.price * (1 - item.discount / 100) * item.quantity).toFixed(2)}</td>
+                <td>${(parseFloat(item.price) * (1 - item.discount / 100) * item.quantity).toFixed(2)}</td>
                 <td>
                   <button onClick={() => handleRemoveItem(item._id)} className="text-3xl btn-danger text-red-600"><MdDeleteForever /></button>
                 </td>

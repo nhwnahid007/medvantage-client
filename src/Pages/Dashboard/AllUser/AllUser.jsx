@@ -3,6 +3,7 @@ import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
 import Swal from "sweetalert2";
 
 import { MdDeleteForever } from "react-icons/md";
+import { Helmet } from "react-helmet-async";
 
 const AllUser = () => {
   const axiosSecure = UseAxiosSecure();
@@ -70,6 +71,9 @@ const AllUser = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>Users</title>
+      </Helmet>
       <h2>All Users</h2>
       <p>Total User: {users.length}</p>
 

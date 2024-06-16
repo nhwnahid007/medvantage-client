@@ -11,6 +11,7 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
+import { Helmet } from "react-helmet-async";
 
 // Define styles for PDF
 const styles = StyleSheet.create({
@@ -141,6 +142,9 @@ const Invoice = () => {
 
   return (
     <div className="bg-gray-100 w-4/6 mx-auto min-h-screen flex flex-col justify-center items-center">
+      <Helmet>
+        <title>Invoice</title>
+      </Helmet>
       <div id="invoice" className="w-full">
         <img
           className="w-20 mx-auto rounded-full"
@@ -148,7 +152,7 @@ const Invoice = () => {
           alt=""
         />
         <p className="text-4xl font-bold text-center my-5"><span className="font-bold text-[#7600dc]">Med</span>vantage</p>
-        <div className="bg-white shadow-md rounded px-8 py-6">
+        <div className="bg-white shadow-md rounded px-8 py-6 overflow-x-auto ">
           <p className="text-3xl font-bold text-center mb-4 text-gray-600">
             Invoice Page: {user?.displayName}
           </p>

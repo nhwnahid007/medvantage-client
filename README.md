@@ -6,7 +6,7 @@
 ## Seller--> Email: seller@gmail.com 
 ## Seller--> Password: Seller@123456 
 
-## Admin--> Password: admin@123456 
+## Admin--> Password: admin@gmail.com 
 ## Admin--> Password: Admin@123456 
 
 
@@ -36,11 +36,22 @@
 - **Health Information Resources:** A section dedicated to providing reliable health information, including guides, and FAQs of treatments, and wellness tips.
 
 
+# Thechnology used:
+
+-  ## [Tailwind CSS]
+-  ## [React ]
+-  ## [Firebase ]
+-  ## [Express ]
+-  ## [MongoDb ]
+
+
+
+
 # Package used:
 
--  ## [React tooltip](https://www.npmjs.com/package/react-tooltip)
--  ## [React typewriter](https://www.npmjs.com/package/react-simple-typewriter)
--  ## [Swipper Slider](https://swiperjs.com/)
--  ## [Animate CSS](https://animate.style/)
--  ## [AOS package](https://michalsnik.github.io/aos/)
--  ## [React Date Picker](https://www.npmjs.com/package/react-datepicker)
+-  ## [Swipper Slider]
+-  ## [Animate CSS]
+-  ## [AOS package]
+-  ## [React Date Picker]
+-  ## [React Hook Form]
+-  ## [React Pdf/renderer]

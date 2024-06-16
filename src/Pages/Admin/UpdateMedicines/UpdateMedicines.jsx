@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import UseAxiosPublic from "../../../Hooks/UseAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
 import useCategory from "../../../Hooks/useCategory";
@@ -6,27 +6,25 @@ import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import { Helmet } from "react-helmet-async";
 
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const UpdateMedicines = () => {
+  const navigate = useNavigate()
   const { id } = useParams();
   const axiosPublic = UseAxiosPublic();
   const [categories]= useCategory()
 
   const axiosSecure = UseAxiosSecure();
 
-
-
-
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
+
   } = useForm();
 
 
@@ -40,6 +38,8 @@ const UpdateMedicines = () => {
     enabled: !!id, // Ensure the query runs only if `id` exists
   });
 
+  console.log(updateMedicine)
+
 
   const onSubmit = async (data) => {
     try {
@@ -52,11 +52,13 @@ const UpdateMedicines = () => {
         },
       });
 
+      console.log(res)
+
       if (res.data.success) {
         const medicineItem = {
           name: data.name,
           short_description: data.short_description,
-         
+          generic_name:data.generic_name,
           image: res.data.data.display_url,
           company: data.company,
           mg: data.mg,
@@ -66,17 +68,20 @@ const UpdateMedicines = () => {
           sellerEmail: data.email,
         };
 
-        const medicineRes = await axiosSecure.patch(`/medicine/${updateMedicine._id}`, medicineItem);
-        if (medicineRes.data.updated) {
+        console.log(medicineItem)
+
+        const medicineRes = await axiosSecure.patch(`/medicine/${id}`, medicineItem);
+        console.log(medicineRes.data)
+        if (medicineRes.data.modifiedCount>0) {
           Swal.fire({
             position: "top-end",
             icon: "success",
-            title: "Medicine info updated successfully",
+            title: `${data.name} updated successfully`,
             showConfirmButton: false,
             timer: 1500,
           });
 
-          reset();
+          navigate('/dashboard/manageCategory')
           toast.success("Updated successfully");
         } else {
           throw new Error("Update failed");
@@ -94,16 +99,20 @@ const UpdateMedicines = () => {
 
 
 
-  console.log(updateMedicine)
-
-  console.log(updateMedicine.generic_name)
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
     <div>
+
+<Helmet>
+        <title>Update Medicine</title>
+      </Helmet>
+
+
          <div>
+
       <div className="flex items-center justify-center text-center dark:text-gray-800">
         <form
           onSubmit={handleSubmit(onSubmit)}

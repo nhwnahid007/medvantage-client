@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
 import SectionHeading from "../../../components/SectionHeading/SectionHeading";
 import useAuth from "../../../Hooks/UseAuth";
+import { Helmet } from "react-helmet-async";
 
 const UserPaymentHistory = () => {
     const { user } = useAuth();
@@ -18,6 +19,10 @@ const UserPaymentHistory = () => {
 
     return (
         <div>
+
+<Helmet>
+        <title>Payment History</title>
+      </Helmet>
             <SectionHeading heading={'Payment History'}></SectionHeading>
             <h3>Total Payment: {payments.length}</h3>
 

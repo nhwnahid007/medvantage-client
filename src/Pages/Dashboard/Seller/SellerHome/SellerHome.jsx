@@ -39,8 +39,8 @@ const SellerHome = () => {
 
   return (
     <div>
-      <h3 className="text-3xl">
-        <span>Hi welcome seller</span>
+      <h3 className="text-3xl font-semibold">
+        <span className="">Welcome Seller: </span>
         {user?.displayName ? user.displayName : "Annonymous"}
       </h3>
       <div className="mt-20 grid gap-y-10 gap-x-6 md:grid-cols-2 lg:grid-cols-3">

@@ -4,6 +4,7 @@ import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import UseAxiosPublic from "../../Hooks/UseAxiosPublic";
+import { Helmet } from "react-helmet-async";
 
 const UpdateProfile = () => {
   const { user } = useAuth();
@@ -68,6 +69,9 @@ const UpdateProfile = () => {
 
   return (
     <div className="">
+      <Helmet>
+        <title>Update Profile</title>
+      </Helmet>
       <div className="max-w-md mt-20 mx-auto p-8 sm:flex sm:space-x-6 dark:bg-gray-50 dark:text-gray-800">
         <div className="flex-shrink-0 w-full mb-6 h-44 sm:h-32 sm:w-32 sm:mb-0">
           <img

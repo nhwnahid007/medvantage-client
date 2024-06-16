@@ -3,6 +3,7 @@ import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
 import SectionHeading from "../../../components/SectionHeading/SectionHeading";
 import { useState } from "react";
 import { FaSpinner } from "react-icons/fa6";
+import { Helmet } from "react-helmet-async";
 
 const ManageBannerAdvertize = () => {
   const axiosSecure = UseAxiosSecure();
@@ -40,6 +41,10 @@ const ManageBannerAdvertize = () => {
     <div>
       <div className="my-10">
         {" "}
+        <Helmet>
+        <title>Manage Banner
+        </title>
+      </Helmet>
         <SectionHeading heading={"Manage Ads"}></SectionHeading>
       </div>
       

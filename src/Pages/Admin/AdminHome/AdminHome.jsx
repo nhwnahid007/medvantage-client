@@ -38,7 +38,7 @@ const totalPendingAmount = pendingMedicines.reduce((total, medicine) => total + 
                 Paid Total
               </p>
               <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                ${totalPaidAmount}
+                ${totalPaidAmount.toFixed(2)}
               </h4>
             </div>
           </div>

@@ -2,10 +2,11 @@ import usePayment from "../../../Hooks/usePayment";
 import SectionHeading from "../../../components/SectionHeading/SectionHeading";
 import { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
-import { PDFDownloadLink, Document, Page, Text, View } from '@react-pdf/renderer'; 
+import { PDFDownloadLink, Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 import "react-datepicker/dist/react-datepicker.css";
 import LoadingSpinner from "../../../components/Shared/LoadinSpinner";
+import { Helmet } from "react-helmet-async";
 
 const SalesReport = () => {
   const [payment, loading] = usePayment();
@@ -39,8 +40,72 @@ const SalesReport = () => {
     return <LoadingSpinner></LoadingSpinner>;
   }
 
+  const styles = StyleSheet.create({
+    page: {
+      padding: 30,
+    },
+    title: {
+      fontSize: 24,
+      textAlign: 'center',
+      marginBottom: 20,
+    },
+    table: {
+      display: "table",
+      width: "auto",
+      borderStyle: "solid",
+      borderWidth: 1,
+      borderColor: '#000',
+      borderRightWidth: 0,
+      borderBottomWidth: 0,
+    },
+    tableRow: {
+      flexDirection: "row",
+    },
+    tableColHeader: {
+      width: "20%",
+      borderStyle: "solid",
+      borderWidth: 1,
+      borderColor: '#000',
+      borderTopWidth: 0,
+      borderLeftWidth: 0,
+      backgroundColor: '#f2f2f2',
+      padding: 5,
+      textAlign: 'center',
+    },
+    tableCol: {
+      width: "20%",
+      borderStyle: "solid",
+      borderWidth: 1,
+      borderColor: '#000',
+      borderTopWidth: 0,
+      borderLeftWidth: 0,
+      padding: 5,
+      textAlign: 'center',
+    },
+    tableColPrice: {
+      width: "20%", // Adjusted width for price column
+      borderStyle: "solid",
+      borderWidth: 1,
+      borderColor: '#000',
+      borderTopWidth: 0,
+      borderLeftWidth: 0,
+      padding: 5,
+      textAlign: 'center',
+    },
+    tableCellHeader: {
+      fontSize: 12,
+      fontWeight: 'bold',
+    },
+    tableCell: {
+      fontSize: 10,
+    }
+  });
+
   return (
     <div>
+      <Helmet>
+        <title>Sales Report</title>
+      </Helmet>
       <SectionHeading heading={"Sales Report"}></SectionHeading>
 
       <div className="flex flex-col lg:flex-row">
@@ -82,30 +147,54 @@ const SalesReport = () => {
         </table>
       </div>
 
-      <div>
+      <div className="my-10">
         <PDFDownloadLink
           className="bg-purple-700 text-white font-bold py-2 px-4 rounded mt-20"
           document={
             <Document>
-              <Page>
-                <Text>Sales Report</Text>
-                <View>
-                  <View style={{ flexDirection: 'row', borderBottom: '1 solid #000' }}>
-                    <Text style={{ width: '20%', textAlign: 'center' }}>Medicine Name</Text>
-                    <Text style={{ width: '20%', textAlign: 'center' }}>Seller Email</Text>
-                    <Text style={{ width: '20%', textAlign: 'center' }}>Buyer Email</Text>
-                    <Text style={{ width: '20%', textAlign: 'center' }}>Date</Text>
-                    <Text style={{ width: '10%', textAlign: 'center' }}>Payment Status</Text>
-                    <Text style={{ width: '10%', textAlign: 'center' }}>Total Price</Text>
+              <Page style={styles.page}>
+                <Text style={styles.title}>Sales Report</Text>
+                <View style={styles.table}>
+                  <View style={styles.tableRow}>
+                    <View style={styles.tableColHeader}>
+                      <Text style={styles.tableCellHeader}>Medicine Name</Text>
+                    </View>
+                    <View style={styles.tableColHeader}>
+                      <Text style={styles.tableCellHeader}>Seller Email</Text>
+                    </View>
+                    <View style={styles.tableColHeader}>
+                      <Text style={styles.tableCellHeader}>Buyer Email</Text>
+                    </View>
+                    <View style={styles.tableColHeader}>
+                      <Text style={styles.tableCellHeader}>Date</Text>
+                    </View>
+                    <View style={styles.tableColHeader}>
+                      <Text style={styles.tableCellHeader}>Payment Status</Text>
+                    </View>
+                    <View style={styles.tableColHeader}>
+                      <Text style={styles.tableCellHeader}>Total Price</Text>
+                    </View>
                   </View>
                   {filteredPayment.map((paymentData, index) => (
-                    <View key={index} style={{ flexDirection: 'row', borderBottom: '1 solid #000' }}>
-                      <Text style={{ width: '20%', textAlign: 'center' }}>{paymentData.medicineName && paymentData.medicineName.length > 0 ? paymentData.medicineName[0] : ''}</Text>
-                      <Text style={{ width: '20%', textAlign: 'center' }}>{paymentData.sellerEmails && paymentData.sellerEmails.length > 0 ? paymentData.sellerEmails[0] : ''}</Text>
-                      <Text style={{ width: '20%', textAlign: 'center' }}>{paymentData.buyerEmail}</Text>
-                      <Text style={{ width: '20%', textAlign: 'center' }}>{paymentData.date}</Text>
-                      <Text style={{ width: '10%', textAlign: 'center' }}>{paymentData.status}</Text>
-                      <Text style={{ width: '10%', textAlign: 'center' }}>{paymentData.price}</Text>
+                    <View key={index} style={styles.tableRow}>
+                      <View style={styles.tableCol}>
+                        <Text style={styles.tableCell}>{paymentData.medicineName && paymentData.medicineName.length > 0 ? paymentData.medicineName[0] : ''}</Text>
+                      </View>
+                      <View style={styles.tableCol}>
+                        <Text style={styles.tableCell}>{paymentData.sellerEmails && paymentData.sellerEmails.length > 0 ? paymentData.sellerEmails[0] : ''}</Text>
+                      </View>
+                      <View style={styles.tableCol}>
+                        <Text style={styles.tableCell}>{paymentData.buyerEmail}</Text>
+                      </View>
+                      <View style={styles.tableCol}>
+                        <Text style={styles.tableCell}>{paymentData.date}</Text>
+                      </View>
+                      <View style={styles.tableCol}>
+                        <Text style={styles.tableCell}>{paymentData.status}</Text>
+                      </View>
+                      <View style={styles.tableColPrice}>
+                        <Text style={styles.tableCell}>{paymentData.price}</Text>
+                      </View>
                     </View>
                   ))}
                 </View>

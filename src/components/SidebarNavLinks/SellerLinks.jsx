@@ -34,7 +34,7 @@ const SellerLinks = () => {
                 <LiaUsersCogSolid className='w-5 h-5' />
 
 
-                <span className='mx-4 font-medium'>Manage Medicines</span>
+                <span className='mx-4 font-medium'>Add Medicines</span>
               </NavLink>
               <NavLink
                 to='sellerPaymentHistory'

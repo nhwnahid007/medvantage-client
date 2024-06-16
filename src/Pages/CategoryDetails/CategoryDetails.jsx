@@ -12,6 +12,8 @@ import toast from "react-hot-toast";
 import useCart from "../../Hooks/useCart";
 import { useState } from "react";
 import { RiDiscountPercentLine } from "react-icons/ri";
+import { Helmet } from "react-helmet-async";
+import SectionHeading from "../../components/SectionHeading/SectionHeading";
 
 const CategoryDetails = () => {
   const axiosPublic = UseAxiosPublic();
@@ -86,7 +88,10 @@ const CategoryDetails = () => {
 
   return (
     <div>
-      <p>Category Details</p>
+      <Helmet>
+        <title>By category</title>
+      </Helmet>
+      <SectionHeading heading={categoryName}></SectionHeading>
       <div className="overflow-x-auto">
         <table className="table">
           <thead>
@@ -130,7 +135,7 @@ const CategoryDetails = () => {
                   {categoryDetailData.unit_price}$
                   <br />
                   <span className="badge bg-purple-300 font-semibold badge-ghost badge-sm">
-                  <RiDiscountPercentLine />{categoryDetailData.discount}%
+                  <RiDiscountPercentLine /><span className="text-gray-700 font-bold">{categoryDetailData.discount}%</span>
                   </span>
                 </td>
                 
@@ -157,13 +162,13 @@ const CategoryDetails = () => {
                             </div>
                             <div className="flex gap-1 items-center">
                               <FaDollarSign></FaDollarSign> 
-                              <span><strong>Discount :</strong> {categoryDetailData.unit_price} %</span>
+                              <span><strong>Discount :</strong> {categoryDetailData.discount} %</span>
                             </div>
                             <div className="flex gap-1 items-center">
                               <FaDollarSign></FaDollarSign> 
                               <span><strong>Generic Name:</strong> {categoryDetailData.generic_name}</span>
                             </div>
-                            <div className="flex gap-1 items-center ">
+                            <div className="flex gap-1 items-center text-left ">
                               <BsFileEarmarkMedical /> 
                               <p><span className="font-semibold mr-1"><strong>Description:</strong> </span>{categoryDetailData.short_description} </p>
                             </div>

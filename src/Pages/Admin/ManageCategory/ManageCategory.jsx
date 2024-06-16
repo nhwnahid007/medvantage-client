@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 
 import LoadingSpinner from "../../../components/Shared/LoadinSpinner";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 
 
@@ -77,6 +78,10 @@ return <LoadingSpinner />;
 return (
 <div>
 <div className="mt-10">
+<Helmet>
+        <title>Manage Medicines
+        </title>
+      </Helmet>
 <SectionHeading heading={"Manage Categories"} />
 </div>
 

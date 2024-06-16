@@ -4,6 +4,7 @@ import usePayment from "../../../Hooks/usePayment";
 import SectionHeading from "../../../components/SectionHeading/SectionHeading";
 import LoadingSpinner from "../../../components/Shared/LoadinSpinner";
 import { FaCheck } from "react-icons/fa";
+import { Helmet } from "react-helmet-async";
 
 const PaymentManagement = () => {
   const [payment, loading, refetch] = usePayment();
@@ -34,6 +35,9 @@ const PaymentManagement = () => {
   return (
     <div>
       <div className="mt-10">
+      <Helmet>
+        <title>Payment Management</title>
+      </Helmet>
         <SectionHeading heading={"Manage Payments"} />
       </div>
 
@@ -42,7 +46,7 @@ const PaymentManagement = () => {
           <LoadingSpinner></LoadingSpinner>
         ) : (
           <div className="overflow-x-auto">
-            <table className="table">
+            <table className="table my-10">
               <thead>
                 <tr>
                   <th>#</th>

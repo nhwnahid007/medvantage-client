@@ -56,8 +56,8 @@ const Navbar = () => {
           })}
         >
           <button className="flex font-semibold items-center gap-1">
-            <FaCartPlus className="text-xl"></FaCartPlus>
-            <div className="badge">+{cart.length}</div>
+            <FaCartPlus className="text-xl  font-bold"></FaCartPlus>
+            <div className="badge font-bold text-purple-500">+{cart.length}</div>
           </button>
         </NavLink>
       </li>
@@ -131,7 +131,7 @@ const Navbar = () => {
           </ul>
         </div>
         <Link to='/'>
-            <span className='text-3xl font-bold opacity-80'> <span className='text-[#7600dc]'>Med</span>vantage</span>
+            <span className='text-3xl rounded-lg px-4 py-2 bg-purple-100 font-bold opacity-80'> <span className='text-[#7600dc]'>Med</span>vantage</span>
             </Link>
       </div>
       <div className="navbar-center hidden lg:flex">

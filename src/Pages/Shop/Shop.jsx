@@ -13,6 +13,7 @@ import useCart from "../../Hooks/useCart";
 import { RiDiscountPercentLine } from "react-icons/ri";
 import UseMedicine from "../../Hooks/UseMedicine";
 import { useQuery } from "@tanstack/react-query";
+import { Helmet } from "react-helmet-async";
 
 const Shop = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -139,21 +140,32 @@ const Shop = () => {
 
   return (
     <div>
-      <SectionHeading heading={"All medicines"}></SectionHeading>
-      <input
-        type="text"
-        placeholder="Search medicine..."
-        value={searchQuery}
-        onChange={handleSearch}
-      />
-      <button onClick={handleSearchButtonClick} className="btn bg-[#7600dc] text-white mx-20">
-        Search
-      </button>
-      <select value={sortBy} onChange={handleSortChange}>
-        <option value="default">Sort By Default</option>
-        <option value="priceLowToHigh">Price: Low to High</option>
-        <option value="priceHighToLow">Price: High to Low</option>
-      </select>
+      <Helmet>
+        <title>Shop</title>
+      </Helmet>
+      <div className="my-10"><SectionHeading heading={"All medicines"}></SectionHeading></div>
+    <div className="md:flex gap-3 space-y-4 md:space-y-0">
+        <div className="flex gap-3">
+          <input
+            type="text"
+            placeholder="Search medicine..."
+            value={searchQuery}
+            onChange={handleSearch}
+            className="input input-bordered"
+          />
+          <button onClick={handleSearchButtonClick} className="btn bg-[#7600dc] text-white">
+            Search
+          </button>
+        </div>
+        <div className="mx-auto">
+          <select className=" mx-auto bg-purple-100 p-3 rounded-md" value={sortBy} onChange={handleSortChange}>
+          <option value="default">Sort By Default</option>
+          <option value="priceLowToHigh">Price: Low to High</option>
+          <option value="priceHighToLow">Price: High to Low</option>
+        </select>
+        </div>
+    </div>
+      
       <div className="overflow-x-auto my-10">
         <table className="table">
           <thead>
@@ -240,7 +252,7 @@ const Shop = () => {
                               </span>
                             </div>
 
-                            <div className="flex gap-1 items-center ">
+                            <div className="flex gap-1 items-center text-left ">
                               <BsFileEarmarkMedical />{" "}
                               <p>
                                 <span className="font-semibold mr-1">

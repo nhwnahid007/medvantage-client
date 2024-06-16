@@ -8,6 +8,9 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useCategory from "../../../../Hooks/useCategory";
 import moment from "moment";
+import { useState } from "react";
+import { FaSpinner } from "react-icons/fa";
+import { Helmet } from "react-helmet-async";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -18,6 +21,7 @@ const ManageMedicines = () => {
   const axiosPublic = UseAxiosPublic();
   const queryClient = useQueryClient();  
   const [categories]=useCategory()
+  const [loading, setLoading] = useState(false);
   console.log(categories)
 
   const {
@@ -55,6 +59,7 @@ const ManageMedicines = () => {
 
   const onSubmit = async (data) => {
     try {
+      setLoading(true)
       const imageFile = { image: data.image[0] };
 
       const res = await axiosPublic.post(image_hosting_api, imageFile, {
@@ -67,7 +72,6 @@ const ManageMedicines = () => {
         const medicineItem = {
           name: data.name,
           generic_name: data.generic_name,
-          
           short_description: data.short_description,
           image: res.data.data.display_url,
           company: data.company,
@@ -86,7 +90,7 @@ const ManageMedicines = () => {
           Swal.fire({
             position: "top-end",
             icon: "success",
-            title: "Your work has been saved",
+            title: `${data.name} has been added`,
             showConfirmButton: false,
             timer: 1500,
             customClass: {
@@ -98,9 +102,10 @@ const ManageMedicines = () => {
           queryClient.invalidateQueries(['medicines', user?.email]);  // Invalidate the medicines query to refetch data
         }
       }
-
+      setLoading(false)
       toast.success("Added successfully");
     } catch (error) {
+      setLoading(false)
       console.error("Error during update:", error);
       toast.error("Error during Update. Please try again later.");
     }
@@ -109,7 +114,10 @@ const ManageMedicines = () => {
   return (
     <div className="">
       <div className="mt-10">
-        <SectionHeading heading={"Seller Medicines"}></SectionHeading>
+      <Helmet>
+        <title>Manage Medicine</title>
+      </Helmet>
+        <SectionHeading heading={"Your Medicines"}></SectionHeading>
       </div>
 
       <div className="flex items-center justify-center">
@@ -374,12 +382,18 @@ const ManageMedicines = () => {
               />
              
 
-              <button
-                type="submit"
-                className="flex items-center justify-center h-12 px-6 mt-8 text-sm  rounded btn font-bold "
-              >
-                Add Info
-              </button>
+             <button
+          type="submit"
+          className="flex items-center justify-center h-12 px-6 mt-8 text-sm  rounded btn font-bold relative"
+          disabled={isLoading} // Disable the button when loading
+        >
+          {loading && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="animate-spin rounded-full h-5 w-5"></div>
+            </div>
+          )}
+          {loading ? <FaSpinner className="animate-spin"></FaSpinner> : "Add Info"} 
+        </button>
             </form>
           </div>
 

@@ -5,6 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../../../Hooks/UseAxiosPublic";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import SectionHeading from "../../../../components/SectionHeading/SectionHeading";
+import { Helmet } from "react-helmet-async";
+import { useState } from "react";
+import { FaSpinner } from "react-icons/fa";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -13,6 +17,7 @@ const RequestAdvertise = () => {
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const axiosPublic = useAxiosPublic();
+    const [isSubmitting, setIsSubmitting] = useState(false);
   
     const {
       register,
@@ -37,6 +42,7 @@ const RequestAdvertise = () => {
     });
   
     const onSubmit = async (data) => {
+      setIsSubmitting(true);
       try {
         const imageFile = new FormData();
         imageFile.append("image", data.image[0]);
@@ -77,16 +83,22 @@ const RequestAdvertise = () => {
         console.error("Error during update:", error);
         toast.error("Error during Update. Please try again later.");
       }
+      finally {
+        setIsSubmitting(false);
+      }
     };
 
   return (
     <div>
+      <Helmet>
+        <title>Ad Request</title>
+      </Helmet>
       <div className="flex items-center justify-center">
         <button
           className="btn bg-purple-600 text-white my-10"
           onClick={() => document.getElementById("my_modal_5").showModal()}
         >
-          Add Medicine Ads 
+         Request for Medicine Ads 
         </button>
       </div>
 
@@ -168,11 +180,12 @@ const RequestAdvertise = () => {
                 </p>
               )}
 
-              <button
+<button
                 type="submit"
                 className="flex items-center justify-center h-12 px-6 mt-8 text-sm rounded btn font-bold "
+                disabled={isSubmitting}
               >
-                Request For advertisement
+                {isSubmitting ? <FaSpinner className="animate-spin text-2xl"></FaSpinner> : "Request For advertisement"}
               </button>
             </form>
           </div>
@@ -180,6 +193,8 @@ const RequestAdvertise = () => {
           <div className="modal-action"></div>
         </div>
       </dialog>
+
+<div className="my-5"><SectionHeading heading={'Your Ad status'}></SectionHeading></div>
 
       <div className="overflow-x-auto">
         <table className="table">

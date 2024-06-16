@@ -15,15 +15,17 @@ const Category = ({category,medicine}) => {
               <img className="rounded-t-lg h-[300px] w-full" src={category.image} alt="" />
             </a>
             <div className="p-5">
-              <a href="#">
-                <h5 className="text-gray-900 font-bold text-2xl tracking-tight mb-2 dark:text-white uppercase">
-                  {category.categoryName}
-                </h5>
-              </a>
-
-              <p>
-                {filteredMedicine.length}
-              </p>
+              <div className="flex items-center">
+                <a href="#">
+                  <h5 className="text-gray-900 font-bold text-2xl tracking-tight mb-2 dark:text-white uppercase">
+                    {category.categoryName}
+                  </h5>
+                </a>
+  
+                <p className="px-4 flex justify-center ml-2 mb-2 bg-purple-100 font-bold w-6 rounded-2xl">
+                  {filteredMedicine.length}
+                </p>
+              </div>
 
               <Link
                 to={`category/${category.categoryName}`}

@@ -1,4 +1,5 @@
 
+import { Helmet } from "react-helmet-async";
 import SectionHeading from "../../../../components/SectionHeading/SectionHeading";
 import useAuth from "../../../../Hooks/UseAuth";
 import usePayment from "../../../../Hooks/usePayment";
@@ -14,6 +15,9 @@ const SellerPaymentHistory = () => {
 
     return (
         <div>
+            <Helmet>
+        <title>Payment History</title>
+      </Helmet>
             <SectionHeading heading={'Payment History'} />
             <h3>Total Payment: {userPayments.length}</h3>
 
