@@ -5,15 +5,6 @@
 
 Medvantage-Server-Github: [https://github.com/nhwnahid007/medvantage-server.git](https://github.com/nhwnahid007/medvantage-server.git).
 
--**Email and Password**- 
-## Seller--> Email: seller@gmail.com 
-## Seller--> Password: Seller@123456 
-
-## Admin--> Password: admin@gmail.com 
-## Admin--> Password: Admin@123456 
-
-
-
 
 
  ## [MedVantage](https://medvantage-mv.web.app)
@@ -37,6 +28,14 @@ Medvantage-Server-Github: [https://github.com/nhwnahid007/medvantage-server.git]
 - **Buy-Sell History:** Keep track of your buying and selling activities with our comprehensive buy-sell history feature, providing insights into your past transactions and interactions on the platform.
 
 - **Health Information Resources:** A section dedicated to providing reliable health information, including guides, and FAQs of treatments, and wellness tips.
+
+
+-**Email and Password**- 
+## Seller--> Email: seller@gmail.com 
+## Seller--> Password: Seller@123456 
+
+## Admin--> Password: admin@gmail.com 
+## Admin--> Password: Admin@123456 
 
 
 # Thechnology used:
