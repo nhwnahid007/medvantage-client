@@ -38,6 +38,50 @@ Medvantage-Server-Github: [https://github.com/nhwnahid007/medvantage-server.git]
 ## Admin--> Password: Admin@123456 
 
 
+# To run the development server locally, follow these steps:
+
+
+
+## Prerequisites
+
+- Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
+
+## Installation and Running
+
+1. **Clone the Repository:**
+    ```bash
+    git clone https://github.com/your-username/your-repo-name.git
+    cd your-repo-name
+    ```
+
+2. **Install Dependencies:**
+    ```bash
+    npm install
+    ```
+
+3. **Run the Development Server:**
+    ```bash
+    npm run dev
+    ```
+
+This will start the server
+
+## Additional Commands
+
+- **Build for Production:**
+    ```bash
+    npm run build
+    ```
+
+- **Run Tests:**
+    ```bash
+    npm test
+    ```
+
+
+
+
+
 # Thechnology used:
 
 -  ## [Tailwind CSS]
