@@ -1,38 +1,28 @@
-import { useState } from 'react'
-import { GrLogout } from 'react-icons/gr'
-// import { FcSettings } from 'react-icons/fc'
-
-import { AiOutlineBars } from 'react-icons/ai'
-
-import {  useNavigate } from 'react-router-dom'
-
-import { Link } from 'react-router-dom'
-
-import useAuth from '../../Hooks/UseAuth'
-import useRole from '../../Hooks/useRole'
-import toast from 'react-hot-toast'
-import AdminLinks from '../SidebarNavLinks/AdminLinks'
-import UseAdmin from '../../Hooks/useAdmin'
-import SellerLinks from '../SidebarNavLinks/SellerLinks'
-
-import UserLinks from '../SidebarNavLinks/UserLinks'
+import { useState } from "react";
+import { GrLogout } from "react-icons/gr";
+import { AiOutlineBars } from "react-icons/ai";
+import { useNavigate, Link } from "react-router-dom";
+import useAuth from "../../Hooks/UseAuth";
+import useRole from "../../Hooks/useRole";
+import toast from "react-hot-toast";
+import AdminLinks from "../SidebarNavLinks/AdminLinks";
+import UseAdmin from "../../Hooks/useAdmin";
+import SellerLinks from "../SidebarNavLinks/SellerLinks";
+import UserLinks from "../SidebarNavLinks/UserLinks";
 
 const Sidebar = () => {
-  const { logOut } = useAuth()
-  const [isActive, setActive] = useState(false)
-  const [role] = useRole()
-  console.log(role)
-  const navigate = useNavigate()
-  const[isAdmin] = UseAdmin()
+  const { logOut } = useAuth();
+  const [isActive, setActive] = useState(false);
+  const [role] = useRole();
+  const [isAdmin] = UseAdmin();
+  const navigate = useNavigate();
 
-  // Sidebar Responsive Handler
   const handleToggle = () => {
-    setActive(!isActive)
-  }
+    setActive(!isActive);
+  };
 
   const handleSignOut = () => {
     logOut().then(() => {
-      console.log("logged out");
       toast.success("Good job! Successfully Logged Out!");
       navigate("/");
     });
@@ -41,101 +31,59 @@ const Sidebar = () => {
   return (
     <>
       {/* Small Screen Navbar */}
-      <div className='bg-gray-100 text-gray-800 flex justify-between md:hidden'>
-        <div>
-          <div className='block cursor-pointer p-4 font-bold'>
-            <Link to='/'>
-            <span className='text-3xl font-bold opacity-80'> <span className='text-[#7600dc]'>Med</span>vantage</span>
-            </Link>
-          </div>
+      <div className="bg-gray-100 text-gray-800 flex justify-between md:hidden">
+        <div className="block cursor-pointer p-4 font-bold">
+          <Link to="/">
+            <span className="text-3xl font-bold opacity-80">
+              <span className="text-[#7600dc]">Med</span>vantage
+            </span>
+          </Link>
         </div>
-
         <button
           onClick={handleToggle}
-          className='mobile-menu-button p-4 focus:outline-none focus:bg-gray-200'
+          className="mobile-menu-button p-4 focus:outline-none focus:bg-gray-200"
         >
-          <AiOutlineBars className='h-5 w-5' />
+          <AiOutlineBars className="h-5 w-5" />
         </button>
       </div>
 
       {/* Sidebar */}
       <div
-        className={`z-10 md:fixed flex flex-col justify-between overflow-x-hidden bg-gray-100 w-64 space-y-6 px-2 py-4 absolute inset-y-0 left-0 transform ${
-          isActive && '-translate-x-full'
-        }  md:translate-x-0  transition duration-200 ease-in-out`}
+        className={`z-50 md:fixed top-0 left-0 h-screen w-64 bg-gray-100 transform ${
+          isActive ? "-translate-x-full" : "translate-x-0"
+        } md:translate-x-0 transition duration-200 ease-in-out flex flex-col shadow-lg`}
       >
-        <div>
-          <div>
-            <div className='w-full hidden md:flex px-4 py-2 shadow-lg rounded-lg justify-center items-center bg-purple-100 mx-auto'>
-              <Link to='/'>
-             <span className='text-3xl font-bold opacity-75'> <span className='text-purple-600'>Med</span>vantage</span>
-              </Link>
-            </div>
-          </div>
-
-          {/* Nav Items */}
-          <div className='flex flex-col justify-between flex-1 mt-6'>
-            {/* Conditional toggle button here.. */}
-
-            {/*  Menu Items */}
-            <nav>
-              {/* Statistics */}
-              {
-                isAdmin && (
-                  <>
-            <AdminLinks></AdminLinks>
-                  </>
-                )
-              }
-
-              {
-                role === 'seller' && (
-                  <>
-                  <SellerLinks></SellerLinks>
-                  </>
-                )
-              }
-
-              {
-                role ==='user' && (
-                  <>
-                  <UserLinks></UserLinks>
-                  </>
-                )
-              }
-              
-            </nav>
-          </div>
+        {/* Logo */}
+        <div className="w-full hidden md:flex px-4 py-4 shadow-lg justify-center items-center bg-purple-100">
+          <Link to="/">
+            <span className="text-3xl font-bold opacity-75">
+              <span className="text-purple-600">Med</span>vantage
+            </span>
+          </Link>
         </div>
 
-        <div>
-          <hr />
+        {/* Scrollable Nav */}
+        <div className="flex-1 overflow-y-auto px-4 mt-4 space-y-4">
+          <nav>
+            {isAdmin && <AdminLinks />}
+            {role === "seller" && <SellerLinks />}
+            {role === "user" && <UserLinks />}
+          </nav>
+        </div>
 
-          {/* Profile Menu */}
-          {/* <NavLink
-            to='/dashboard/profile'
-            className={({ isActive }) =>
-              `flex items-center px-4 py-2 my-5  transition-colors duration-300 transform  hover:bg-gray-300   hover:text-gray-700 ${
-                isActive ? 'bg-gray-300  text-gray-700' : 'text-gray-600'
-              }`
-            }
-          >
-            <FcSettings className='w-5 h-5' />
-
-            <span className='mx-4 font-medium'>Profile</span>
-          </NavLink> */}
+        {/* Sticky Logout at Bottom */}
+        <div className="p-4 border-t bg-gray-100">
           <button
             onClick={handleSignOut}
-            className='flex w-full items-center px-4 py-2 mt-5 text-gray-600 hover:bg-gray-300   hover:text-gray-700 transition-colors duration-300 transform'
+            className="flex items-center w-full gap-3 text-gray-600 hover:bg-gray-300 px-4 py-2 rounded transition duration-200"
           >
-            <GrLogout className='w-5 h-5' />
-
-            <span className='mx-4 font-medium'>Logout</span>
+            <GrLogout className="w-5 h-5" />
+            <span className="font-medium">Logout</span>
           </button>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
