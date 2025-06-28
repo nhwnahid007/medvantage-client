@@ -20,12 +20,21 @@ const Navbar = () => {
 
   const [cart] = useCart();
 
+  const handleNavLinkClick = () => {
+    setIsOpen(false);
+  };
+
+  const handleAvatarLinkClick = () => {
+    setIsAvatarOpen(false);
+  };
+
   const navLinks = (
     <>
       <li>
         <NavLink
           to="/"
           className="m-1"
+          onClick={handleNavLinkClick}
           style={({ isActive }) => ({
             color: isActive ? "#fff" : "#545e6f",
             background: isActive ? "#7600dc" : "#f0f0f0",
@@ -38,6 +47,7 @@ const Navbar = () => {
         <NavLink
           to="/shop"
           className="m-1"
+          onClick={handleNavLinkClick}
           style={({ isActive }) => ({
             color: isActive ? "#fff" : "#545e6f",
             background: isActive ? "#7600dc" : "#f0f0f0",
@@ -50,6 +60,7 @@ const Navbar = () => {
         <NavLink
           to="/cart"
           className="m-1"
+          onClick={handleNavLinkClick}
           style={({ isActive }) => ({
             color: isActive ? "#fff" : "#545e6f",
             background: isActive ? "#7600dc" : "#f0f0f0",
@@ -57,22 +68,11 @@ const Navbar = () => {
         >
           <button className="flex font-semibold items-center gap-1">
             <FaCartPlus className="text-xl  font-bold"></FaCartPlus>
-            <div className="badge font-bold text-purple-500">+{cart.length}</div>
+            <div className="badge font-bold text-purple-500">
+              +{cart.length}
+            </div>
           </button>
         </NavLink>
-      </li>
-      <li>
-        <details className="dropdown">
-          <summary className="btn btn-sm m-1 p-1">Language</summary>
-          <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
-            <li>
-              <a>English </a>
-            </li>
-            <li>
-              <a>Spanish</a>
-            </li>
-          </ul>
-        </details>
       </li>
     </>
   );
@@ -106,6 +106,7 @@ const Navbar = () => {
       console.log("logged out");
       toast.success("Good job! Successfully Logged Out!");
       navigate("/");
+      setIsAvatarOpen(false);
     });
   };
 
@@ -130,9 +131,12 @@ const Navbar = () => {
             {navLinks}
           </ul>
         </div>
-        <Link to='/'>
-            <span className='text-3xl rounded-lg px-4 py-2 bg-purple-100 font-bold opacity-80'> <span className='text-[#7600dc]'>Med</span>vantage</span>
-            </Link>
+        <Link to="/">
+          <span className="text-3xl rounded-lg px-4 py-2 bg-purple-100 font-bold opacity-80">
+            {" "}
+            <span className="text-[#7600dc]">Med</span>vantage
+          </span>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{navLinks}</ul>
@@ -166,6 +170,7 @@ const Navbar = () => {
                   <NavLink
                     to="/updateProfile"
                     className="m-1"
+                    onClick={handleAvatarLinkClick}
                     style={({ isActive }) => ({
                       color: isActive ? "#fff" : "#545e6f",
                       background: isActive ? "#7600dc" : "#f0f0f0",
@@ -175,7 +180,11 @@ const Navbar = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="dashboard/" className="m-1">
+                  <NavLink
+                    to="dashboard/"
+                    className="m-1"
+                    onClick={handleAvatarLinkClick}
+                  >
                     Dashboard
                   </NavLink>
                 </li>
