@@ -110,7 +110,9 @@ const RequestAdvertise = () => {
             className="flex flex-col gap-4 bg-purple-50 p-6 rounded"
           >
             <div>
-              <label className="label text-sm font-semibold">Medicine Name</label>
+              <label className="label text-sm font-semibold">
+                Medicine Name
+              </label>
               <input
                 {...register("name", { required: "Name is required" })}
                 type="text"
@@ -118,20 +120,26 @@ const RequestAdvertise = () => {
                 className="input input-bordered w-full"
               />
               {errors.name && (
-                <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
+                <p className="text-xs text-red-500 mt-1">
+                  {errors.name.message}
+                </p>
               )}
             </div>
 
             <div>
               <label className="label text-sm font-semibold">Description</label>
               <input
-                {...register("description", { required: "Description is required" })}
+                {...register("description", {
+                  required: "Description is required",
+                })}
                 type="text"
                 placeholder="Enter description"
                 className="input input-bordered w-full"
               />
               {errors.description && (
-                <p className="text-xs text-red-500 mt-1">{errors.description.message}</p>
+                <p className="text-xs text-red-500 mt-1">
+                  {errors.description.message}
+                </p>
               )}
             </div>
 
@@ -144,7 +152,9 @@ const RequestAdvertise = () => {
                 className="file-input file-input-bordered w-full"
               />
               {errors.image && (
-                <p className="text-xs text-red-500 mt-1">{errors.image.message}</p>
+                <p className="text-xs text-red-500 mt-1">
+                  {errors.image.message}
+                </p>
               )}
             </div>
 
@@ -195,7 +205,7 @@ const RequestAdvertise = () => {
                     className={`px-2 py-1 text-xs font-medium rounded-full ${
                       ad.status === "requested"
                         ? "bg-yellow-100 text-yellow-700"
-                        : ad.status === "approved"
+                        : ad.status === "accepted"
                         ? "bg-green-100 text-green-700"
                         : "bg-gray-200 text-gray-600"
                     }`}
