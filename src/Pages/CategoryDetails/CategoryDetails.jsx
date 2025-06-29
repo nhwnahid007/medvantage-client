@@ -14,6 +14,7 @@ import { useState } from "react";
 import { RiDiscountPercentLine } from "react-icons/ri";
 import { Helmet } from "react-helmet-async";
 import SectionHeading from "../../components/SectionHeading/SectionHeading";
+import MedicineDetailsModal from "../../components/Shared/MedicineDetailsModal";
 
 const CategoryDetails = () => {
   const axiosPublic = UseAxiosPublic();
@@ -28,7 +29,9 @@ const CategoryDetails = () => {
   const { data: categoryDetail = [] } = useQuery({
     queryKey: ["categoryDetail", categoryName],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/medicineByCategory?categoryName=${categoryName}`);
+      const res = await axiosPublic.get(
+        `/medicineByCategory?categoryName=${categoryName}`
+      );
       return res.data;
     },
   });
@@ -47,13 +50,13 @@ const CategoryDetails = () => {
       };
 
       try {
-        const response = await axiosSecure.post('/carts', cartItem);
+        const response = await axiosSecure.post("/carts", cartItem);
         if (response.data.insertedId) {
           toast.success(`${medicine.name} added to your cart successfully`);
           refetch();
         }
       } catch (error) {
-        console.error('Error adding item to cart:', error);
+        console.error("Error adding item to cart:", error);
       }
     } else {
       Swal.fire({
@@ -63,26 +66,26 @@ const CategoryDetails = () => {
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Please Login!"
+        confirmButtonText: "Please Login!",
       }).then((result) => {
         if (result.isConfirmed) {
-          navigate('/login', { state: { from: location } });
+          navigate("/login", { state: { from: location } });
         }
       });
     }
-  }
+  };
 
   const handleIncreaseQuantity = (medicineId) => {
-    setQuantities(prevQuantities => ({
+    setQuantities((prevQuantities) => ({
       ...prevQuantities,
-      [medicineId]: (prevQuantities[medicineId] || 0) + 1
+      [medicineId]: (prevQuantities[medicineId] || 0) + 1,
     }));
   };
 
   const handleDecreaseQuantity = (medicineId) => {
-    setQuantities(prevQuantities => ({
+    setQuantities((prevQuantities) => ({
       ...prevQuantities,
-      [medicineId]: Math.max((prevQuantities[medicineId] || 0) - 1, 0)
+      [medicineId]: Math.max((prevQuantities[medicineId] || 0) - 1, 0),
     }));
   };
 
@@ -96,15 +99,14 @@ const CategoryDetails = () => {
         <table className="table">
           <thead>
             <tr>
-            <th>
+              <th>
                 <label>
                   <input type="checkbox" className="checkbox" />
                 </label>
               </th>
               <th>Name</th>
               <th>Price</th>
-             
-             
+
               <th>Details</th>
               <th>Add To Cart</th>
               <th>Quantity</th>
@@ -127,7 +129,6 @@ const CategoryDetails = () => {
                     </div>
                     <div>
                       <div className="font-bold">{categoryDetailData.name}</div>
-                      
                     </div>
                   </div>
                 </td>
@@ -135,72 +136,48 @@ const CategoryDetails = () => {
                   {categoryDetailData.unit_price}$
                   <br />
                   <span className="badge bg-purple-300 font-semibold badge-ghost badge-sm">
-                  <RiDiscountPercentLine /><span className="text-gray-700 font-bold">{categoryDetailData.discount}%</span>
+                    <RiDiscountPercentLine />
+                    <span className="text-gray-700 font-bold">
+                      {categoryDetailData.discount}%
+                    </span>
                   </span>
                 </td>
-                
-                
+
                 <td>
-                  <button
-                    className=""
-                    onClick={() => document.getElementById(`${categoryDetailData._id}`).showModal()}
-                  >
-                    <FaEye></FaEye>
-                  </button>
-                  <dialog id={`${categoryDetailData._id}`} className="modal">
-                    <div className="modal-box">
-                      <div className="card bg-base-100 shadow-xl">
-                        <figure className="px-10 pt-10">
-                          <img src={categoryDetailData.image} alt="Shoes" className="rounded-xl" />
-                        </figure>
-                        <div className="card-body items-center text-center">
-                          <h2 className="card-title">{categoryDetailData.name}</h2>
-                          <div className="">
-                            <div className="flex gap-1 items-center">
-                              <FaDollarSign></FaDollarSign> 
-                              <span><strong>Price:</strong> {categoryDetailData.unit_price}</span>
-                            </div>
-                            <div className="flex gap-1 items-center">
-                              <FaDollarSign></FaDollarSign> 
-                              <span><strong>Discount :</strong> {categoryDetailData.discount} %</span>
-                            </div>
-                            <div className="flex gap-1 items-center">
-                              <FaDollarSign></FaDollarSign> 
-                              <span><strong>Generic Name:</strong> {categoryDetailData.generic_name}</span>
-                            </div>
-                            <div className="flex gap-1 items-center text-left ">
-                              <BsFileEarmarkMedical /> 
-                              <p><span className="font-semibold mr-1"><strong>Description:</strong> </span>{categoryDetailData.short_description} </p>
-                            </div>
-                            <div className="flex gap-1 items-center">
-                              <MdOutlineFactory /> 
-                              <span><strong>Company Name:</strong> {categoryDetailData.company}</span>
-                            </div>
-                            <div className="flex gap-1 items-center">
-                              <CiMedicalCross />
-                              <span><strong>Mg:</strong> {categoryDetailData.mg}<small>mg</small></span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="modal-action">
-                        <form method="dialog">
-                          <button className="btn text-white font-bold bg-[#7600dc]">Close</button>
-                        </form>
-                      </div>
-                    </div>
-                  </dialog>
+                  <MedicineDetailsModal medicine={categoryDetailData} />
                 </td>
                 <td>
-                  <button onClick={() => handleAddToCart(categoryDetailData, quantities[categoryDetailData._id])} className="btn btn-outline border-0 border-b-4 text-[#7600dc]">
+                  <button
+                    onClick={() =>
+                      handleAddToCart(
+                        categoryDetailData,
+                        quantities[categoryDetailData._id]
+                      )
+                    }
+                    className="btn btn-outline border-0 border-b-4 text-[#7600dc]"
+                  >
                     Add to Cart
                   </button>
                 </td>
                 <td>
                   <div className="flex items-center gap-2">
-                    <button onClick={() => handleDecreaseQuantity(categoryDetailData._id)} className="btn btn-sm btn-outline text-[#7600dc]">-</button>
+                    <button
+                      onClick={() =>
+                        handleDecreaseQuantity(categoryDetailData._id)
+                      }
+                      className="btn btn-sm btn-outline text-[#7600dc]"
+                    >
+                      -
+                    </button>
                     <span>{quantities[categoryDetailData._id] || 0}</span>
-                    <button onClick={() => handleIncreaseQuantity(categoryDetailData._id)} className="btn btn-sm btn-outline text-[#7600dc]">+</button>
+                    <button
+                      onClick={() =>
+                        handleIncreaseQuantity(categoryDetailData._id)
+                      }
+                      className="btn btn-sm btn-outline text-[#7600dc]"
+                    >
+                      +
+                    </button>
                   </div>
                 </td>
               </tr>
