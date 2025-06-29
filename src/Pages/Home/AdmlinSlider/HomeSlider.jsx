@@ -4,15 +4,13 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 
-
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 
-const AdminSlider = () => {
+const HomeSlider = () => {
   const axiosSecure = UseAxiosSecure();
 
   const { data: bannerAds = [], isLoading } = useQuery({
@@ -23,50 +21,49 @@ const AdminSlider = () => {
     },
   });
 
-  console.log(bannerAds);
-
   return (
-    <div className="my-10 max-h-[700px]">
+    <div className="p-0">
       {isLoading ? (
         <SkeletonTheme baseColor="#ebddfd" highlightColor="#cfa8f0">
-        <div className="skeleton-container">
-          <Skeleton count={5} height={100} />
-          
-        </div>
-      </SkeletonTheme>
-      
+          <div className="skeleton-container">
+            <Skeleton count={5} height={100} />
+          </div>
+        </SkeletonTheme>
       ) : (
-        <Swiper
-          slidesPerView={1}
-          spaceBetween={30}
-          loop={true}
-          autoplay={{
-            delay: 2500,
-            disableOnInteraction: false,
-          }}
-          pagination={{
-            clickable: true,
-          }}
-          navigation={true}
-          modules={[Autoplay, Pagination, Navigation]}
-          className="mySwiper"
-        >
-          {bannerAds &&
-            bannerAds.map((ad, index) =>
-              ad.status === "accepted" ? (
+        <div className="w-full container mx-auto rounded-xl overflow-hidden">
+          <Swiper
+            slidesPerView={1}
+            spaceBetween={20}
+            loop={true}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+            pagination={{
+              clickable: true,
+            }}
+            navigation={true}
+            modules={[Autoplay, Pagination, Navigation]}
+            className="mySwiper"
+          >
+            {bannerAds
+              .filter(ad => ad.status === "accepted")
+              .map((ad, index) => (
                 <SwiperSlide key={index}>
-                  <img
-                    className="h-[400px] lg:h-[660px] w-full rounded-xl"
-                    src={ad.image}
-                    alt={`Banner ${index}`}
-                  />
+                  <div className="w-full h-[240px] sm:h-[300px] md:h-[400px] lg:h-[480px] 2xl:h-[550px]">
+                    <img
+                      src={ad.image}
+                      alt={`Banner ${index}`}
+                      className="w-full h-full object-cover rounded-xl"
+                    />
+                  </div>
                 </SwiperSlide>
-              ) : null
-            )}
-        </Swiper>
+              ))}
+          </Swiper>
+        </div>
       )}
     </div>
   );
 };
 
-export default AdminSlider;
+export default HomeSlider;
