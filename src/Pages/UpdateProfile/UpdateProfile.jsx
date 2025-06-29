@@ -35,7 +35,7 @@ const UpdateProfile = () => {
         text: "Do you want to update your profile information?",
         icon: "question",
         showCancelButton: true,
-        confirmButtonColor: "#9333ea", // Purple color to match your theme
+        confirmButtonColor: "#9333ea", 
         cancelButtonColor: "#6b7280",
         confirmButtonText: "Yes, update it!",
         cancelButtonText: "Cancel",

@@ -1,63 +1,91 @@
 import { FaDollarSign } from "react-icons/fa";
+import { MdOutlinePendingActions } from "react-icons/md";
+import { RiShoppingBag2Line } from "react-icons/ri";
+import { BsFillPersonBadgeFill } from "react-icons/bs";
 import useAuth from "../../../Hooks/UseAuth";
 import usePayment from "../../../Hooks/usePayment";
 
 const AdminHome = () => {
   const { user } = useAuth();
-  const [payment] = usePayment()
+  const [payment] = usePayment();
 
-  // Filter payments based on status
-// Filter payments based on status
-// Filter medicines based on status
-const paidMedicines = payment.filter(medicine => medicine.status === 'paid');
-const pendingMedicines = payment.filter(medicine => medicine.status === 'pending');
+  const paidMedicines = payment.filter((p) => p.status === "paid");
+  const pendingMedicines = payment.filter((p) => p.status === "pending");
 
-// Calculate total paid amount for medicines
-const totalPaidAmount = paidMedicines.reduce((total, medicine) => total + parseFloat(medicine.price), 0);
-
-// Calculate total pending amount for medicines
-const totalPendingAmount = pendingMedicines.reduce((total, medicine) => total + parseFloat(medicine.price), 0);
-
-
-
+  const totalPaidAmount = paidMedicines.reduce(
+    (total, p) => total + parseFloat(p.price),
+    0
+  );
+  const totalPendingAmount = pendingMedicines.reduce(
+    (total, p) => total + parseFloat(p.price),
+    0
+  );
 
   return (
-    <div>
-      <h3 className="text-3xl font-bold opacity-75">Dear Admin</h3>
-      {user?.displayName ? user.displayName : "Annonymous"}
+    <div className="p-4">
+      <h3 className="text-3xl font-bold opacity-75 mb-2">Welcome,</h3>
+      <div className="text-xl font-semibold text-purple-700 flex items-center gap-2 mb-10">
+        <BsFillPersonBadgeFill /> {user?.displayName || "Anonymous Admin"}
+      </div>
 
-     <div className="mt-20 grid gap-y-10 gap-x-6 md:grid-cols-2 lg:grid-cols-3">
-          <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-            <div
-              className={`bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center from-green-600 to-green-400 text-white shadow-green-500/40`}
-            >
-              <FaDollarSign className="w-6 h-6 text-white" />
-            </div>
-            <div className="p-4 text-right">
-              <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                Paid Total
-              </p>
-              <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                ${totalPaidAmount.toFixed(2)}
-              </h4>
-            </div>
-          </div>
-          <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-            <div
-              className={`bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center from-orange-600 to-orange-400 text-white shadow-orange-500/40`}
-            >
-              <FaDollarSign className="w-6 h-6 text-white" />
-            </div>
-            <div className="p-4 text-right">
-              <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                Pending Total
-              </p>
-              <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                ${totalPendingAmount}
-              </h4>
-            </div>
-          </div>
-     </div>
+      <div className="grid gap-y-10 gap-x-6 md:grid-cols-2 lg:grid-cols-3">
+        {/* Total Revenue */}
+        <StatCard
+          color="from-green-600 to-green-400"
+          icon={<FaDollarSign className="w-6 h-6 text-white" />}
+          title="Paid Revenue"
+          value={`$${totalPaidAmount.toFixed(2)}`}
+        />
+
+        {/* Pending Amount */}
+        <StatCard
+          color="from-orange-600 to-orange-400"
+          icon={<MdOutlinePendingActions className="w-6 h-6 text-white" />}
+          title="Pending Amount"
+          value={`$${totalPendingAmount.toFixed(2)}`}
+        />
+
+        {/* Total Orders */}
+        <StatCard
+          color="from-blue-600 to-blue-400"
+          icon={<RiShoppingBag2Line className="w-6 h-6 text-white" />}
+          title="Total Orders"
+          value={payment.length}
+        />
+
+        {/* Paid Orders */}
+        <StatCard
+          color="from-purple-600 to-purple-400"
+          icon={<FaDollarSign className="w-6 h-6 text-white" />}
+          title="Paid Orders"
+          value={paidMedicines.length}
+        />
+
+        {/* Pending Orders */}
+        <StatCard
+          color="from-yellow-600 to-yellow-400"
+          icon={<MdOutlinePendingActions className="w-6 h-6 text-white" />}
+          title="Pending Orders"
+          value={pendingMedicines.length}
+        />
+      </div>
+    </div>
+  );
+};
+
+// Reusable Stat Card Component
+const StatCard = ({ color, icon, title, value }) => {
+  return (
+    <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+      <div
+        className={`bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center ${color} text-white`}
+      >
+        {icon}
+      </div>
+      <div className="p-4 text-right mt-8">
+        <p className="block text-sm text-gray-600">{title}</p>
+        <h4 className="text-2xl font-semibold text-gray-900">{value}</h4>
+      </div>
     </div>
   );
 };
