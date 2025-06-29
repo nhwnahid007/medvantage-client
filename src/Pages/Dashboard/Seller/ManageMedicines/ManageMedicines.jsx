@@ -112,7 +112,7 @@ const ManageMedicines = () => {
   };
 
   return (
-    <div className="">
+    <div className="px-4 sm:px-6 lg:px-10">
       <div className="mt-10">
       <Helmet>
         <title>Manage Medicine</title>
@@ -122,7 +122,7 @@ const ManageMedicines = () => {
 
       <div className="flex items-center justify-center">
         <button
-          className="btn"
+          className="btn bg-purple-600 text-white my-10"
           onClick={() => document.getElementById("my_modal_5").showModal()}
         >
           Add new Medicine
@@ -406,9 +406,7 @@ const ManageMedicines = () => {
           <thead>
             <tr>
               <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
+                #
               </th>
               <th>Name</th>
               <th>Category</th>

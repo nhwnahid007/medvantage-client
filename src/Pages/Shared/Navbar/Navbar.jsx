@@ -111,7 +111,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 p-0 pt-1">
       <div className="navbar-start">
         <div
           ref={dropdownRef}

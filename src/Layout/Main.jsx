@@ -2,20 +2,20 @@ import { Outlet, useLocation } from "react-router-dom";
 import Footer from "../Pages/Shared/Footer/Footer";
 import Navbar from "../Pages/Shared/Navbar/Navbar";
 
-import 'animate.css';
-import AOS from 'aos';
-import 'aos/dist/aos.css'; 
+import "animate.css";
+import AOS from "aos";
+import "aos/dist/aos.css";
 AOS.init();
-
 
 const Main = () => {
   const location = useLocation();
-  const noHeaderFooter = location.pathname.includes('login') || location.pathname.includes('signUp')
+  const noHeaderFooter =
+    location.pathname.includes("login") || location.pathname.includes("signUp");
   return (
     <div className="flex flex-col min-h-screen">
-       <div className="sticky top-0 z-50"> 
+      <div className="sticky top-0 z-50">
         {noHeaderFooter || <Navbar></Navbar>}
-        </div>
+      </div>
       <div className="flex-1">
         <Outlet />
       </div>
