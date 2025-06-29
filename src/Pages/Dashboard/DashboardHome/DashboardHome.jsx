@@ -7,7 +7,7 @@ const DashboardHome = () => {
     const [role] = useRole();
 
     return (
-        <div>
+        <div className="p-4">
             {role === 'admin' && <AdminHome />}
             {role === 'seller' && <SellerHome />}
             {role === 'user' && <UserHome />}

@@ -151,13 +151,10 @@ const router = createBrowserRouter([
         path: "updateMedicine/:id",
         element: (
           <AdminRoute>
-           <UpdateMedicines></UpdateMedicines>
+            <UpdateMedicines></UpdateMedicines>
           </AdminRoute>
-        )
-      }
-      
-   ,
-    
+        ),
+      },
 
       //seller routes
       {
@@ -177,7 +174,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "requestAvertise",
+        path: "requestAdvertise",
         element: (
           <SellerRoute>
             <RequestAdvertise></RequestAdvertise>
