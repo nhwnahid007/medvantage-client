@@ -7,10 +7,12 @@ import SectionHeading from "../../../components/SectionHeading/SectionHeading";
 import { FaCheck, FaTimes, FaClock } from "react-icons/fa";
 import UseAdmin from "../../../Hooks/useAdmin";
 import LoadingSpinner from "../../../components/Shared/LoadinSpinner";
+import { useState } from "react";
 
 const ManageSellerRequests = () => {
   const [isAdmin, isAdminLoading] = UseAdmin();
   const { sellerRequests, updateSellerRequestStatus } = useSellerRequest();
+  const [statusFilter, setStatusFilter] = useState("all");
 
   // Show loading while checking admin status
   if (isAdminLoading) {
@@ -28,6 +30,21 @@ const ManageSellerRequests = () => {
       </div>
     );
   }
+
+  // Filter and sort requests
+  const filteredRequests = sellerRequests.filter((request) => {
+    if (statusFilter === "all") return true;
+    return request.status === statusFilter;
+  });
+
+  const sortedRequests = [...filteredRequests].sort((a, b) => {
+    return new Date(b.requestDate) - new Date(a.requestDate);
+  });
+
+  // Count pending requests
+  const pendingCount = sellerRequests.filter(
+    (request) => request.status === "pending"
+  ).length;
 
   const handleStatusUpdate = (requestId, status) => {
     const statusText = status === "approved" ? "approve" : "reject";
@@ -114,7 +131,39 @@ const ManageSellerRequests = () => {
       </Helmet>
 
       <div className="my-10">
-        <SectionHeading heading="Manage Seller Requests" />
+        <div className="flex items-center justify-between">
+          <SectionHeading heading="Manage Seller Requests" />
+          <div className="flex gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-800">{sellerRequests.length}</div>
+              <div className="text-sm text-gray-600">Total Requests</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-yellow-600">{pendingCount}</div>
+              <div className="text-sm text-gray-600">Pending</div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Filter Section */}
+        <div className="mb-6">
+          <div className="flex items-center gap-4">
+            <label className="text-sm font-medium text-gray-700">Filter by status:</label>
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            >
+              <option value="all">All Requests</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            <span className="text-sm text-gray-600">
+              Showing {sortedRequests.length} of {sellerRequests.length} requests
+            </span>
+          </div>
+        </div>
       </div>
 
       {sellerRequests.length === 0 ? (
@@ -139,10 +188,12 @@ const ManageSellerRequests = () => {
               </tr>
             </thead>
             <tbody>
-              {sellerRequests.map((request, index) => (
+              {sortedRequests.map((request, index) => (
                 <tr
                   key={request._id}
-                  className="border-b hover:bg-gray-50 transition-colors"
+                  className={`border-b hover:bg-gray-50 transition-colors ${
+                    request.status === "pending" ? "bg-yellow-50" : ""
+                  }`}
                 >
                   <td className="p-4 font-medium">{index + 1}</td>
                   <td className="p-4 font-medium">{request.userName}</td>
