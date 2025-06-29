@@ -112,7 +112,7 @@ const ManageMedicines = () => {
   };
 
   return (
-    <div className="">
+    <div className="px-4 sm:px-6 lg:px-10">
       <div className="mt-10">
       <Helmet>
         <title>Manage Medicine</title>

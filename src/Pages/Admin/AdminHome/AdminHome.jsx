@@ -22,7 +22,7 @@ const AdminHome = () => {
   );
 
   return (
-    <div className="p-4">
+    <div className="px-4 sm:px-6 lg:px-10">
       <h3 className="text-3xl font-bold opacity-75 mb-2">Welcome,</h3>
       <div className="text-xl font-semibold text-purple-700 flex items-center gap-2 mb-10">
         <BsFillPersonBadgeFill /> {user?.displayName || "Anonymous Admin"}

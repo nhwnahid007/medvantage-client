@@ -35,7 +35,7 @@ const ManageBannerAdvertize = () => {
   };
 
   return (
-    <div className="px-4 sm:px-8">
+    <div className="px-4 sm:px-6 lg:px-10 ">
       <Helmet>
         <title>Manage Banner</title>
       </Helmet>

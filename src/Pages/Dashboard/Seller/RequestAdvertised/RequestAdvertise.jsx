@@ -14,230 +14,204 @@ const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const RequestAdvertise = () => {
-    const { user } = useAuth();
-    const axiosSecure = useAxiosSecure();
-    const axiosPublic = useAxiosPublic();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-  
-    const {
-      register,
-      handleSubmit,
-      formState: { errors },
-      reset,
-    } = useForm();
-  
-    const { refetch, data: ads = [] } = useQuery({
-      queryKey: ["ads", user?.email],
-      queryFn: async () => {
-        try {
-          const res = await axiosSecure.get(
-            `/advertisementBySeller?email=${user.email}`
-          );
-          return res.data;
-        } catch (error) {
-          console.error("Error fetching advertisement:", error);
-          throw new Error("Failed to fetch advertisement");
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  const { refetch, data: ads = [] } = useQuery({
+    queryKey: ["ads", user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/advertisementBySeller?email=${user.email}`
+      );
+      return res.data;
+    },
+  });
+
+  const onSubmit = async (data) => {
+    setIsSubmitting(true);
+    try {
+      const imageFile = new FormData();
+      imageFile.append("image", data.image[0]);
+
+      const res = await axiosPublic.post(image_hosting_api, imageFile);
+
+      if (res.data.success) {
+        const adItem = {
+          name: data.name,
+          description: data.description,
+          image: res.data.data.display_url,
+          email: user?.email,
+          status: "requested",
+        };
+
+        const adRes = await axiosSecure.post("/advertisementBySeller", adItem);
+        if (adRes.data.insertedId) {
+          document.getElementById("my_modal_5").close();
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Advertisement requested!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          reset();
+          refetch();
         }
-      },
-    });
-  
-    const onSubmit = async (data) => {
-      setIsSubmitting(true);
-      try {
-        const imageFile = new FormData();
-        imageFile.append("image", data.image[0]);
-  
-        const res = await axiosPublic.post(image_hosting_api, imageFile);
-  
-        if (res.data.success) {
-          const adItem = {
-            name: data.name,
-            description: data.description,
-            image: res.data.data.display_url,
-            email: user?.email,
-            status: "requested",
-          };
-  
-          const adRes = await axiosSecure.post("/advertisementBySeller", adItem);
-          if (adRes.data.insertedId) {
-            const modal = document.getElementById("my_modal_5");
-            modal.close();
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Your work has been saved",
-              showConfirmButton: false,
-              timer: 1500,
-              customClass: {
-                container: "z-50",
-              },
-            });
-  
-            reset();
-            refetch();
-          }
-        }
-  
-        toast.success("Added successfully");
-      } catch (error) {
-        console.error("Error during update:", error);
-        toast.error("Error during Update. Please try again later.");
       }
-      finally {
-        setIsSubmitting(false);
-      }
-    };
+
+      toast.success("Ad submitted successfully!");
+    } catch (error) {
+      console.error("Error during ad request:", error);
+      toast.error("Something went wrong. Try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
-    <div>
+    <div className="px-4 sm:px-6 lg:px-10 py-10">
       <Helmet>
         <title>Ad Request</title>
       </Helmet>
-      <div className="flex items-center justify-center">
+
+      <div className="text-center">
         <button
           className="btn bg-purple-600 text-white my-10"
           onClick={() => document.getElementById("my_modal_5").showModal()}
         >
-         Request for Medicine Ads 
+          Request for Medicine Ads
         </button>
       </div>
 
+      {/* Modal */}
       <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
-          <form method="dialog">
-            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-              ✕
-            </button>
-          </form>
-          <h3 className="font-bold text-center text-lg">Add medicine Here</h3>
+          <button
+            className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            onClick={() => document.getElementById("my_modal_5").close()}
+          >
+            ✕
+          </button>
+          <h3 className="font-bold text-center text-lg mb-4">
+            Request Advertisement
+          </h3>
 
-          <div className="flex items-center justify-center text-center dark:text-gray-800">
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              noValidate=""
-              action=""
-              className="flex bg-purple-200 flex-col w-full max-w-lg p-12 rounded shadow-lg dark:text-gray-800"
-            >
-              <label
-                htmlFor="description"
-                className="self-start text-xs font-semibold"
-              >
-                Name
-              </label>
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-4 bg-purple-50 p-6 rounded"
+          >
+            <div>
+              <label className="label text-sm font-semibold">Medicine Name</label>
               <input
                 {...register("name", { required: "Name is required" })}
-                placeholder="Name"
-                id="name"
                 type="text"
-                className={`flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600 ${
-                  errors.name && "border-red-500"
-                }`}
+                placeholder="Enter name"
+                className="input input-bordered w-full"
               />
               {errors.name && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.name.message}
-                </p>
+                <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
               )}
-              <label
-                htmlFor="description"
-                className="self-start text-xs font-semibold"
-              >
-                Ad Description
-              </label>
+            </div>
+
+            <div>
+              <label className="label text-sm font-semibold">Description</label>
               <input
                 {...register("description", { required: "Description is required" })}
-                placeholder="Ad Description"
-                id="description"
                 type="text"
-                className={`flex items-center h-12 px-4 mt-2 rounded dark:text-gray-50 focus:outline-none focus:ring-2 focus:dark:border-violet-600 focus:dark:ring-violet-600 ${
-                  errors.description && "border-red-500"
-                }`}
+                placeholder="Enter description"
+                className="input input-bordered w-full"
               />
               {errors.description && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.description.message}
-                </p>
+                <p className="text-xs text-red-500 mt-1">{errors.description.message}</p>
               )}
+            </div>
 
-              <label
-                htmlFor="image"
-                className="self-start mt-3 text-xs font-semibold"
-              >
-                Add Photo
-              </label>
+            <div>
+              <label className="label text-sm font-semibold">Photo</label>
               <input
                 {...register("image", { required: "Image is required" })}
-                accept="image/*"
-                placeholder="Image"
                 type="file"
-                className={`file-input file-input-bordered w-full max-w-xs ${
-                  errors.image && "border-red-500"
-                }`}
+                accept="image/*"
+                className="file-input file-input-bordered w-full"
               />
               {errors.image && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.image.message}
-                </p>
+                <p className="text-xs text-red-500 mt-1">{errors.image.message}</p>
               )}
+            </div>
 
-<button
-                type="submit"
-                className="flex items-center justify-center h-12 px-6 mt-8 text-sm rounded btn font-bold "
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? <FaSpinner className="animate-spin text-2xl"></FaSpinner> : "Request For advertisement"}
-              </button>
-            </form>
-          </div>
-
-          <div className="modal-action"></div>
+            <button
+              type="submit"
+              className="btn bg-purple-600 hover:bg-purple-700 text-white mt-4"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <FaSpinner className="animate-spin text-lg" />
+              ) : (
+                "Submit Advertisement"
+              )}
+            </button>
+          </form>
         </div>
       </dialog>
 
-<div className="my-5"><SectionHeading heading={'Your Ad status'}></SectionHeading></div>
+      {/* Advertisement List */}
+      <SectionHeading heading="Your Ad Status" />
 
-      <div className="overflow-x-auto">
-        <table className="table">
-          {/* head */}
-          <thead>
+      <div className="overflow-x-auto shadow-sm mt-6 bg-white rounded-lg">
+        <table className="table table-zebra">
+          <thead className="bg-gray-100 text-gray-600 text-sm">
             <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
-              <th>image</th>
+              <th>#</th>
+              <th>Image</th>
               <th>Name</th>
               <th>Description</th>
               <th>Status</th>
-
-              <th></th>
             </tr>
           </thead>
           <tbody>
-            {ads.map((ad, index) => (
-              <tr key={index}>
+            {ads.map((ad, idx) => (
+              <tr key={ad._id}>
+                <td>{idx + 1}</td>
                 <td>
-                  <label>
-                    <input type="checkbox" className="checkbox" />
-                  </label>
-                </td>
-                <td>
-                  <div className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle w-12 h-12">
-                        <img src={ad.image} alt="Ad Image" />
-                      </div>
-                    </div>
-                    
-                  </div>
+                  <img
+                    src={ad.image}
+                    alt={ad.name}
+                    className="w-12 h-12 rounded object-cover"
+                  />
                 </td>
                 <td>{ad.name}</td>
                 <td>{ad.description}</td>
-               
-                <td>{ad.status}</td>
+                <td>
+                  <span
+                    className={`px-2 py-1 text-xs font-medium rounded-full ${
+                      ad.status === "requested"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : ad.status === "approved"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-gray-200 text-gray-600"
+                    }`}
+                  >
+                    {ad.status}
+                  </span>
+                </td>
               </tr>
             ))}
+            {ads.length === 0 && (
+              <tr>
+                <td colSpan="5" className="text-center py-4 text-gray-500">
+                  No ad requests found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
