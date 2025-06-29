@@ -14,7 +14,6 @@ import { FaEye } from "react-icons/fa";
 
 const Shop = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("default");
   const [currentPage, setCurrentPage] = useState(1); // Pagination state
   const itemsPerPage = 10; // Items per page
@@ -33,27 +32,18 @@ const Shop = () => {
       return data.count;
     },
   });
-  console.log(count);
 
   const numberOfPages = Math.ceil(count / itemsPerPage);
-  console.log(numberOfPages);
-
   const pages = [...Array(numberOfPages).keys()];
-
-  console.log(pages);
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
-  };
-
-  const handleSearchButtonClick = () => {
-    setSearchTerm(searchQuery);
-    setCurrentPage(1); // Reset to the first page when a new search is performed
+    setCurrentPage(1); // Reset to first page on search input change
   };
 
   const handleSortChange = (event) => {
     setSortBy(event.target.value);
-    setCurrentPage(1); // Reset to the first page when the sort order is changed
+    setCurrentPage(1); // Reset to first page on sort change
   };
 
   const handleAddToCart = async (medicine, quantity) => {
@@ -109,19 +99,15 @@ const Shop = () => {
     }));
   };
 
-  // Filter and sort the medicines
+  // Filter and sort the medicines using searchQuery (no need for extra searchTerm state)
   const filteredMedicine = medicine.filter(
     (medicineData) =>
       (medicineData.name &&
-        medicineData.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        medicineData.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (medicineData.company &&
-        medicineData.company
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())) ||
+        medicineData.company.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (medicineData.generic_name &&
-        medicineData.generic_name
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase()))
+        medicineData.generic_name.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   const sortedMedicine = [...filteredMedicine].sort((a, b) => {
@@ -161,12 +147,7 @@ const Shop = () => {
             placeholder="Search medicine..."
             className="input input-bordered w-full md:w-auto"
           />
-          <button
-            onClick={handleSearchButtonClick}
-            className="btn bg-[#7600dc] text-white"
-          >
-            Search
-          </button>
+          {/* Search button removed because search happens instantly */}
         </div>
         <div>
           <select
@@ -215,29 +196,29 @@ const Shop = () => {
                       </div>
                     </td>
                     <td className="space-y-1 text-sm">
-  {medicineData.discount > 0 ? (
-    <>
-      <div className="text-gray-500 line-through text-xs">
-        ${parseFloat(medicineData.unit_price).toFixed(2)}
-      </div>
-      <div className="text-lg font-semibold text-green-600">
-        $
-        {(
-          medicineData.unit_price *
-          (1 - medicineData.discount / 100)
-        ).toFixed(2)}
-      </div>
-      <div className="badge bg-purple-100 text-purple-800 font-medium text-xs">
-        <RiDiscountPercentLine className="mr-1" />
-        {medicineData.discount}% Off
-      </div>
-    </>
-  ) : (
-    <div className="text-lg font-semibold text-gray-700">
-      ${parseFloat(medicineData.unit_price).toFixed(2)}
-    </div>
-  )}
-</td>
+                      {medicineData.discount > 0 ? (
+                        <>
+                          <div className="text-gray-500 line-through text-xs">
+                            ${parseFloat(medicineData.unit_price).toFixed(2)}
+                          </div>
+                          <div className="text-lg font-semibold text-green-600">
+                            $
+                            {(
+                              medicineData.unit_price *
+                              (1 - medicineData.discount / 100)
+                            ).toFixed(2)}
+                          </div>
+                          <div className="badge bg-purple-100 text-purple-800 font-medium text-xs">
+                            <RiDiscountPercentLine className="mr-1" />
+                            {medicineData.discount}% Off
+                          </div>
+                        </>
+                      ) : (
+                        <div className="text-lg font-semibold text-gray-700">
+                          ${parseFloat(medicineData.unit_price).toFixed(2)}
+                        </div>
+                      )}
+                    </td>
 
                     <td>
                       <button
@@ -252,51 +233,79 @@ const Shop = () => {
                       </button>
 
                       {/* Modal */}
-                      <dialog id={medicineData._id} className="modal">
-                        <div className="modal-box max-w-2xl">
-                          <h3 className="text-xl font-semibold mb-4">
-                            {medicineData.name}
-                          </h3>
-                          <div className="flex flex-col md:flex-row gap-6">
-                            <img
-                              src={medicineData.image}
-                              alt="Medicine"
-                              className="w-40 h-40 object-cover rounded-lg"
-                            />
-                            <div className="space-y-2 text-left">
-                              <p>
-                                <strong>Price:</strong> $
-                                {medicineData.unit_price}
-                              </p>
-                              <p>
-                                <strong>Discount:</strong>{" "}
-                                {medicineData.discount}%
-                              </p>
-                              <p>
-                                <strong>Generic Name:</strong>{" "}
-                                {medicineData.generic_name}
-                              </p>
-                              <p>
-                                <strong>Company:</strong> {medicineData.company}
-                              </p>
-                              <p>
-                                <strong>Mg:</strong> {medicineData.mg}mg
-                              </p>
-                              <p>
-                                <strong>Description:</strong>{" "}
-                                {medicineData.short_description}
-                              </p>
-                            </div>
-                          </div>
-                          <div className="modal-action">
-                            <form method="dialog">
-                              <button className="btn bg-[#7600dc] text-white">
-                                Close
-                              </button>
-                            </form>
-                          </div>
-                        </div>
-                      </dialog>
+                      {/* Modal */}
+<dialog id={medicineData._id} className="modal">
+  <div className="modal-box max-w-3xl p-6 relative rounded-xl shadow-lg bg-white">
+    {/* Close icon top-right */}
+    <button
+      onClick={() => document.getElementById(medicineData._id).close()}
+      className="btn btn-sm btn-circle absolute right-4 top-4 hover:bg-gray-200"
+      aria-label="Close"
+    >
+      ✕
+    </button>
+
+    <h3 className="text-2xl font-semibold mb-6 border-b pb-3">{medicineData.name}</h3>
+
+    <div className="flex flex-col md:flex-row gap-8">
+      {/* Image */}
+      <div className="flex-shrink-0 rounded-lg overflow-hidden border border-gray-200 shadow-sm w-48 h-48">
+        <img
+          src={medicineData.image}
+          alt={medicineData.name}
+          className="w-full h-full object-cover"
+        />
+      </div>
+
+      {/* Info Section */}
+      <div className="flex-1 space-y-4 text-gray-800">
+        <div className="flex justify-between items-center">
+          <span className="font-semibold text-lg">Price:</span>
+          <span className="text-lg font-bold text-green-700">
+            ${parseFloat(medicineData.unit_price).toFixed(2)}
+          </span>
+        </div>
+
+        {medicineData.discount > 0 && (
+          <div className="flex justify-between items-center text-purple-700 font-semibold">
+            <span>Discount:</span>
+            <span>{medicineData.discount}% Off</span>
+          </div>
+        )}
+
+        <div className="flex justify-between">
+          <span className="font-semibold">Generic Name:</span>
+          <span>{medicineData.generic_name}</span>
+        </div>
+
+        <div className="flex justify-between">
+          <span className="font-semibold">Company:</span>
+          <span>{medicineData.company}</span>
+        </div>
+
+        <div className="flex justify-between">
+          <span className="font-semibold">Mg:</span>
+          <span>{medicineData.mg} mg</span>
+        </div>
+
+        <div>
+          <h4 className="font-semibold mb-1">Description:</h4>
+          <p className="text-gray-600 leading-relaxed">{medicineData.short_description}</p>
+        </div>
+      </div>
+    </div>
+
+    {/* Modal Actions */}
+    <div className="modal-action mt-6">
+      <form method="dialog">
+        <button className="btn bg-[#7600dc] text-white hover:bg-[#5a009e] transition-colors duration-300">
+          Close
+        </button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
                     </td>
                     <td>
                       <button
