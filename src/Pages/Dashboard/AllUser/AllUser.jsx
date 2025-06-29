@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
 import Swal from "sweetalert2";
 import { MdDeleteForever } from "react-icons/md";
@@ -7,6 +7,8 @@ import SectionHeading from "../../../components/SectionHeading/SectionHeading";
 
 const AllUser = () => {
   const axiosSecure = UseAxiosSecure();
+  const queryClient = useQueryClient();
+
   const { data: users = [], refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
@@ -50,6 +52,8 @@ const AllUser = () => {
         axiosSecure.patch(`/user/${_id}`, { role }).then((res) => {
           if (res.data.modifiedCount > 0) {
             refetch();
+            queryClient.invalidateQueries(["userSellerRequest"]);
+            queryClient.invalidateQueries(["sellerRequests"]);
             Swal.fire("Updated!", "User role updated successfully.", "success");
           }
         });

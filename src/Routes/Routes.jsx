@@ -26,6 +26,7 @@ import SellerPaymentHistory from "../Pages/Dashboard/Seller/PaymentHistory/Selle
 import RequestAdvertise from "../Pages/Dashboard/Seller/RequestAdvertised/RequestAdvertise";
 import ManageBannerAdvertize from "../Pages/Admin/ManageBannerAdvertize/ManageBannerAdvertize";
 import UpdateMedicines from "../Pages/Admin/UpdateMedicines/UpdateMedicines";
+import ManageSellerRequests from "../Pages/Admin/ManageSellerRequests/ManageSellerRequests";
 
 const router = createBrowserRouter([
   {
@@ -152,6 +153,14 @@ const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <UpdateMedicines></UpdateMedicines>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manageSellerRequests",
+        element: (
+          <AdminRoute>
+            <ManageSellerRequests></ManageSellerRequests>
           </AdminRoute>
         ),
       },
