@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import UseAxiosPublic from "../../Hooks/UseAxiosPublic";
 import { Helmet } from "react-helmet-async";
+import Swal from "sweetalert2";
 
 const UpdateProfile = () => {
   const { user } = useAuth();
@@ -24,8 +25,27 @@ const UpdateProfile = () => {
 
   const { register, handleSubmit } = useForm();
 
+  console.log("userData", userData.photoUrl);
+
   const onSubmit = async (data) => {
     try {
+      // Show confirmation dialog
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to update your profile information?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#9333ea", // Purple color to match your theme
+        cancelButtonColor: "#6b7280",
+        confirmButtonText: "Yes, update it!",
+        cancelButtonText: "Cancel",
+      });
+
+      // If user cancels, return early
+      if (!result.isConfirmed) {
+        return;
+      }
+
       let photoUrl = userData.photoUrl; // Use existing image if no new one
 
       if (data.photo && data.photo.length > 0) {
