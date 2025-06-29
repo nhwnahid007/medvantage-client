@@ -139,15 +139,24 @@ const Shop = () => {
 
       {/* Search + Sort Controls */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
-        <div className="flex gap-2 w-full md:w-auto">
+        <div className="relative w-full md:w-auto flex gap-2">
           <input
             type="text"
             value={searchQuery}
             onChange={handleSearch}
             placeholder="Search medicine..."
-            className="input input-bordered w-full md:w-auto"
+            className="input input-bordered w-full pr-10 md:w-auto"
           />
-          {/* Search button removed because search happens instantly */}
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800 focus:outline-none"
+              aria-label="Clear search"
+              type="button"
+            >
+              ✕
+            </button>
+          )}
         </div>
         <div>
           <select
@@ -233,79 +242,85 @@ const Shop = () => {
                       </button>
 
                       {/* Modal */}
-                      {/* Modal */}
-<dialog id={medicineData._id} className="modal">
-  <div className="modal-box max-w-3xl p-6 relative rounded-xl shadow-lg bg-white">
-    {/* Close icon top-right */}
-    <button
-      onClick={() => document.getElementById(medicineData._id).close()}
-      className="btn btn-sm btn-circle absolute right-4 top-4 hover:bg-gray-200"
-      aria-label="Close"
-    >
-      ✕
-    </button>
+                      <dialog id={medicineData._id} className="modal">
+                        <div className="modal-box max-w-3xl p-6 relative rounded-xl shadow-lg bg-white">
+                          {/* Close icon top-right */}
+                          <button
+                            onClick={() =>
+                              document.getElementById(medicineData._id).close()
+                            }
+                            className="btn btn-sm btn-circle absolute right-4 top-4 hover:bg-gray-200"
+                            aria-label="Close"
+                          >
+                            ✕
+                          </button>
 
-    <h3 className="text-2xl font-semibold mb-6 border-b pb-3">{medicineData.name}</h3>
+                          <h3 className="text-2xl font-semibold mb-6 border-b pb-3">
+                            {medicineData.name}
+                          </h3>
 
-    <div className="flex flex-col md:flex-row gap-8">
-      {/* Image */}
-      <div className="flex-shrink-0 rounded-lg overflow-hidden border border-gray-200 shadow-sm w-48 h-48">
-        <img
-          src={medicineData.image}
-          alt={medicineData.name}
-          className="w-full h-full object-cover"
-        />
-      </div>
+                          <div className="flex flex-col md:flex-row gap-8">
+                            {/* Image */}
+                            <div className="flex-shrink-0 rounded-lg overflow-hidden border border-gray-200 shadow-sm w-48 h-48">
+                              <img
+                                src={medicineData.image}
+                                alt={medicineData.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
 
-      {/* Info Section */}
-      <div className="flex-1 space-y-4 text-gray-800">
-        <div className="flex justify-between items-center">
-          <span className="font-semibold text-lg">Price:</span>
-          <span className="text-lg font-bold text-green-700">
-            ${parseFloat(medicineData.unit_price).toFixed(2)}
-          </span>
-        </div>
+                            {/* Info Section */}
+                            <div className="flex-1 space-y-4 text-gray-800">
+                              <div className="flex justify-between items-center">
+                                <span className="font-semibold text-lg">
+                                  Price:
+                                </span>
+                                <span className="text-lg font-bold text-green-700">
+                                  ${parseFloat(medicineData.unit_price).toFixed(2)}
+                                </span>
+                              </div>
 
-        {medicineData.discount > 0 && (
-          <div className="flex justify-between items-center text-purple-700 font-semibold">
-            <span>Discount:</span>
-            <span>{medicineData.discount}% Off</span>
-          </div>
-        )}
+                              {medicineData.discount > 0 && (
+                                <div className="flex justify-between items-center text-purple-700 font-semibold">
+                                  <span>Discount:</span>
+                                  <span>{medicineData.discount}% Off</span>
+                                </div>
+                              )}
 
-        <div className="flex justify-between">
-          <span className="font-semibold">Generic Name:</span>
-          <span>{medicineData.generic_name}</span>
-        </div>
+                              <div className="flex justify-between">
+                                <span className="font-semibold">Generic Name:</span>
+                                <span>{medicineData.generic_name}</span>
+                              </div>
 
-        <div className="flex justify-between">
-          <span className="font-semibold">Company:</span>
-          <span>{medicineData.company}</span>
-        </div>
+                              <div className="flex justify-between">
+                                <span className="font-semibold">Company:</span>
+                                <span>{medicineData.company}</span>
+                              </div>
 
-        <div className="flex justify-between">
-          <span className="font-semibold">Mg:</span>
-          <span>{medicineData.mg} mg</span>
-        </div>
+                              <div className="flex justify-between">
+                                <span className="font-semibold">Mg:</span>
+                                <span>{medicineData.mg} mg</span>
+                              </div>
 
-        <div>
-          <h4 className="font-semibold mb-1">Description:</h4>
-          <p className="text-gray-600 leading-relaxed">{medicineData.short_description}</p>
-        </div>
-      </div>
-    </div>
+                              <div>
+                                <h4 className="font-semibold mb-1">Description:</h4>
+                                <p className="text-gray-600 leading-relaxed">
+                                  {medicineData.short_description}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
 
-    {/* Modal Actions */}
-    <div className="modal-action mt-6">
-      <form method="dialog">
-        <button className="btn bg-[#7600dc] text-white hover:bg-[#5a009e] transition-colors duration-300">
-          Close
-        </button>
-      </form>
-    </div>
-  </div>
-</dialog>
-
+                          {/* Modal Actions */}
+                          <div className="modal-action mt-6">
+                            <form method="dialog">
+                              <button className="btn bg-[#7600dc] text-white hover:bg-[#5a009e] transition-colors duration-300">
+                                Close
+                              </button>
+                            </form>
+                          </div>
+                        </div>
+                      </dialog>
                     </td>
                     <td>
                       <button
@@ -318,18 +333,14 @@ const Shop = () => {
                     <td>
                       <div className="flex items-center gap-2">
                         <button
-                          onClick={() =>
-                            handleDecreaseQuantity(medicineData._id)
-                          }
+                          onClick={() => handleDecreaseQuantity(medicineData._id)}
                           className="btn btn-sm btn-outline"
                         >
                           −
                         </button>
                         <span className="font-semibold">{qty}</span>
                         <button
-                          onClick={() =>
-                            handleIncreaseQuantity(medicineData._id)
-                          }
+                          onClick={() => handleIncreaseQuantity(medicineData._id)}
                           className="btn btn-sm btn-outline"
                         >
                           +
