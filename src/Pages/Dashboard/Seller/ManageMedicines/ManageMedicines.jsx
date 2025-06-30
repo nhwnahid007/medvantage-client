@@ -11,6 +11,7 @@ import moment from "moment";
 import { useState } from "react";
 import { FaSpinner } from "react-icons/fa";
 import { Helmet } from "react-helmet-async";
+import LoadingSpinner from "../../../../components/Shared/LoadinSpinner";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -50,7 +51,7 @@ const ManageMedicines = () => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div> <LoadingSpinner/></div>;
   }
 
   if (error) {
