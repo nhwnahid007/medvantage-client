@@ -5,6 +5,8 @@ import { MdOutlinePayment } from "react-icons/md";
 import { RiAdvertisementFill } from "react-icons/ri";
 import { TbCategoryPlus } from "react-icons/tb";
 import { FaStore } from "react-icons/fa";
+import { MdAddBox } from "react-icons/md";
+import { FaPills } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import UseAxiosSecure from "../../Hooks/UseAxiosSecure";
@@ -22,8 +24,18 @@ const links = [
   },
   {
     to: "manageCategory",
-    label: "Manage Medicines",
+    label: "Manage Categories",
     icon: <TbCategoryPlus className="w-5 h-5" />,
+  },
+  {
+    to: "addMedicine",
+    label: "Add Medicine",
+    icon: <MdAddBox className="w-5 h-5" />,
+  },
+  {
+    to: "manageMedicines",
+    label: "Manage Medicines",
+    icon: <FaPills className="w-5 h-5" />,
   },
   {
     to: "manageSellerRequests",

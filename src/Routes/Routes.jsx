@@ -17,6 +17,8 @@ import AdminRoute from "./AdminRoutes";
 import ManageMedicines from "../Pages/Dashboard/Seller/ManageMedicines/ManageMedicines";
 import SellerRoute from "./SellerRoute";
 import ManageCategory from "../Pages/Admin/ManageCategory/ManageCategory";
+import AddMedicine from "../Pages/Admin/AddMedicine/AddMedicine";
+import AdminManageMedicines from "../Pages/Admin/ManageMedicines/ManageMedicines";
 import Payment from "../Pages/Payment/Payment";
 import Invoice from "../Pages/Payment/Invoice";
 import UserPaymentHistory from "../Pages/Dashboard/User/UserPaymentHistory";
@@ -121,6 +123,22 @@ const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ManageCategory></ManageCategory>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "addMedicine",
+        element: (
+          <AdminRoute>
+            <AddMedicine></AddMedicine>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manageMedicines",
+        element: (
+          <AdminRoute>
+            <AdminManageMedicines></AdminManageMedicines>
           </AdminRoute>
         ),
       },
