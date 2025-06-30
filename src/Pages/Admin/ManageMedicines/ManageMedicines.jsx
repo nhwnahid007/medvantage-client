@@ -8,10 +8,23 @@ import toast from "react-hot-toast";
 import LoadingSpinner from "../../../components/Shared/LoadinSpinner";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import { useMemo } from "react";
 
 const ManageMedicines = () => {
   const [medicines, loading, refetch] = UseMedicine();
   const axiosSecure = UseAxiosSecure();
+
+  // Sort medicines by date (latest first)
+  const sortedMedicines = useMemo(() => {
+    if (!medicines || medicines.length === 0) return [];
+    
+    return [...medicines].sort((a, b) => {
+      // Convert date strings to Date objects for comparison
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return dateB - dateA; // Descending order (latest first)
+    });
+  }, [medicines]);
 
   const handleDeleteMedicine = (_id) => {
     Swal.fire({
@@ -71,11 +84,12 @@ const ManageMedicines = () => {
               <th className="p-4">Mg</th>
               <th className="p-4">Price</th>
               <th className="p-4">Seller</th>
+              <th className="p-4">Date Added</th>
               <th className="p-4">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {medicines.map((medicine, index) => (
+            {sortedMedicines.map((medicine, index) => (
               <tr
                 key={medicine._id}
                 className="border-b hover:bg-gray-50 transition-colors"
@@ -97,6 +111,9 @@ const ManageMedicines = () => {
                 </td>
                 <td className="p-4">${medicine.unit_price}</td>
                 <td className="p-4 text-sm">{medicine.sellerEmail}</td>
+                <td className="p-4 text-sm text-gray-600">
+                  {medicine.date || "N/A"}
+                </td>
                 <td className="p-4">
                   <div className="flex gap-2">
                     <Link to={`/dashboard/updateMedicine/${medicine._id}`}>
