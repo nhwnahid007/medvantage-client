@@ -61,6 +61,19 @@ const AllUser = () => {
     });
   };
 
+  // Sort users by registration date (latest first)
+  const sortedUsers = [...users].sort((a, b) => {
+    // Extract timestamp from MongoDB ObjectId
+    const timestampA = new Date(parseInt(a._id.substring(0, 8), 16) * 1000);
+    const timestampB = new Date(parseInt(b._id.substring(0, 8), 16) * 1000);
+    return timestampB - timestampA; // Latest first
+  });
+
+  // Count users by role
+  const userCount = users.filter((user) => user.role === "user").length;
+  const sellerCount = users.filter((user) => user.role === "seller").length;
+  const adminCount = users.filter((user) => user.role === "admin").length;
+
   return (
     <div className="px-4 sm:px-6 lg:px-10">
       <Helmet>
@@ -68,7 +81,35 @@ const AllUser = () => {
       </Helmet>
 
       <div className="my-10">
-        <SectionHeading heading="Manage Users" />
+        <div className="flex items-center justify-between">
+          <SectionHeading heading="Manage Users" />
+          <div className="flex gap-4">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-800">
+                {users.length}
+              </div>
+              <div className="text-sm text-gray-600">Total Users</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-blue-600">
+                {userCount}
+              </div>
+              <div className="text-sm text-gray-600">Users</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-green-600">
+                {sellerCount}
+              </div>
+              <div className="text-sm text-gray-600">Sellers</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-purple-600">
+                {adminCount}
+              </div>
+              <div className="text-sm text-gray-600">Admins</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="overflow-x-auto shadow-md rounded-lg bg-white">
@@ -79,47 +120,64 @@ const AllUser = () => {
               <th className="p-4">Name</th>
               <th className="p-4">Email</th>
               <th className="p-4">Role</th>
+              <th className="p-4">Registration Date</th>
               <th className="p-4">Change Role</th>
               <th className="p-4">Remove</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
-              <tr
-                key={user._id}
-                className="border-b hover:bg-gray-50 transition-colors"
-              >
-                <td className="p-4 font-medium">{index + 1}</td>
-                <td className="p-4">{user.name}</td>
-                <td className="p-4">{user.email}</td>
-                <td className="p-4 capitalize">{user.role}</td>
-                <td className="p-4">
-                  <select
-                    onChange={(e) =>
-                      handleChangeUserRole(user._id, e.target.value)
-                    }
-                    defaultValue="default"
-                    className="select select-bordered select-sm w-full max-w-xs"
-                  >
-                    <option disabled value="default">
-                      Change User Role
-                    </option>
-                    <option value="user">User</option>
-                    <option value="seller">Seller</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </td>
-                <td className="p-4">
-                  <button
-                    onClick={() => handleDeleteUser(user._id)}
-                    className="text-red-600 hover:text-red-800 transition"
-                    title="Delete User"
-                  >
-                    <MdDeleteForever size={24} />
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {sortedUsers.map((user, index) => {
+              // Extract registration date from MongoDB ObjectId
+              const registrationDate = new Date(
+                parseInt(user._id.substring(0, 8), 16) * 1000
+              );
+
+              return (
+                <tr
+                  key={user._id}
+                  className="border-b hover:bg-gray-50 transition-colors"
+                >
+                  <td className="p-4 font-medium">{index + 1}</td>
+                  <td className="p-4">{user.name}</td>
+                  <td className="p-4">{user.email}</td>
+                  <td className="p-4 capitalize">{user.role}</td>
+                  <td className="p-4">
+                    {registrationDate.toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </td>
+                  <td className="p-4">
+                    <select
+                      onChange={(e) =>
+                        handleChangeUserRole(user._id, e.target.value)
+                      }
+                      defaultValue="default"
+                      className="select select-bordered select-sm w-full max-w-xs"
+                    >
+                      <option disabled value="default">
+                        Change User Role
+                      </option>
+                      <option value="user">User</option>
+                      <option value="seller">Seller</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  </td>
+                  <td className="p-4">
+                    <button
+                      onClick={() => handleDeleteUser(user._id)}
+                      className="text-red-600 hover:text-red-800 transition"
+                      title="Delete User"
+                    >
+                      <MdDeleteForever size={24} />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
