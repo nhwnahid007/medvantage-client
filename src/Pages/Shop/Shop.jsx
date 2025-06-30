@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SectionHeading from "../../components/SectionHeading/SectionHeading";
 import useAuth from "../../Hooks/UseAuth";
 import Swal from "sweetalert2";
@@ -12,7 +12,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 import MedicineDetailsModal from "../../components/Shared/MedicineDetailsModal";
 
-
 const Shop = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("default");
@@ -25,6 +24,15 @@ const Shop = () => {
   const [, refetch] = useCart();
   const [quantities, setQuantities] = useState({});
   const [medicine] = UseMedicine();
+
+  // Initialize searchQuery from URL parameters
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchParam = urlParams.get("search");
+    if (searchParam) {
+      setSearchQuery(searchParam);
+    }
+  }, [location.search]);
 
   const { data: count = "" } = useQuery({
     queryKey: ["count", user?.email],
@@ -40,6 +48,13 @@ const Shop = () => {
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
     setCurrentPage(1); // Reset to first page on search input change
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    setCurrentPage(1);
+    // Clear URL search parameter
+    navigate(location.pathname, { replace: true });
   };
 
   const handleSortChange = (event) => {
@@ -154,7 +169,7 @@ const Shop = () => {
           />
           {searchQuery && (
             <button
-              onClick={() => setSearchQuery("")}
+              onClick={handleClearSearch}
               className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-800 focus:outline-none"
               aria-label="Clear search"
               type="button"

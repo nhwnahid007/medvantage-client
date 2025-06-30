@@ -1,54 +1,58 @@
 import { Link } from "react-router-dom";
 
-const Category = ({category,medicine}) => {
-    console.log(medicine)
-    const filteredMedicine = medicine.filter(
-        (item) => item.categoryName === category.categoryName
-      );
-      
+const Category = ({ category, medicine }) => {
+  const filteredMedicine = medicine.filter(
+    (item) => item.categoryName === category.categoryName
+  );
+
   return (
     <div>
-      <>
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-white shadow-md border border-gray-200 rounded-lg max-w-sm dark:bg-gray-800 dark:border-gray-700">
-            <a href="#">
-              <img className="rounded-t-lg h-[300px] w-full" src={category.image} alt="" />
-            </a>
-            <div className="p-5">
-              <div className="flex items-center">
-                <a href="#">
-                  <h5 className="text-gray-900 font-bold text-2xl tracking-tight mb-2 dark:text-white uppercase">
-                    {category.categoryName}
-                  </h5>
-                </a>
-  
-                <p className="px-4 flex justify-center ml-2 mb-2 bg-purple-100 font-bold w-6 rounded-2xl">
-                  {filteredMedicine.length}
-                </p>
+      <Link to={`category/${category.categoryName}`}>
+        <div className="max-w-2xl mx-auto group cursor-pointer">
+          <div className="bg-white shadow-xl border border-gray-200 rounded-2xl max-w-sm dark:bg-gray-800 dark:border-gray-700 overflow-hidden transition-all duration-500 hover:shadow-2xl hover:scale-105 hover:border-purple-400 dark:hover:border-purple-500 transform hover:-translate-y-2">
+            {/* Image Container */}
+            <div className="relative overflow-hidden">
+              <img
+                className="rounded-t-2xl h-[240px] w-full object-cover transition-transform duration-700 group-hover:scale-125"
+                src={category.image}
+                alt={category.categoryName}
+              />
+              {/* Gradient overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-purple-900/40 via-purple-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+              {/* Medicine count badge */}
+              <div className="absolute top-4 right-4">
+                <span className="px-4 py-2 bg-gradient-to-r from-purple-600 to-purple-700 text-white text-sm font-bold rounded-full shadow-lg backdrop-blur-sm border border-white/20">
+                  {filteredMedicine.length}{" "}
+                  {filteredMedicine.length === 1 ? "Item" : "Items"}
+                </span>
               </div>
 
-              <Link
-                to={`category/${category.categoryName}`}
-                className="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-3 py-2 text-center inline-flex items-center  dark:bg-purple-600 dark:hover:bg-purple-600 dark:focus:ring-purple-800"
-              >
-                Explore This category
-                <svg
-                  className="-mr-1 ml-2 h-4 w-4"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </Link>
+              {/* Floating category name overlay */}
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                <h5 className="text-white font-bold text-xl tracking-tight uppercase drop-shadow-lg">
+                  {category.categoryName}
+                </h5>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-4 bg-gradient-to-br from-white to-purple-50 dark:from-gray-800 dark:to-gray-900">
+              <div className="text-center">
+                <h5 className="text-gray-900 font-bold text-xl tracking-tight mb-2 dark:text-white uppercase group-hover:text-purple-700 dark:group-hover:text-purple-400 transition-colors duration-300">
+                  {category.categoryName}
+                </h5>
+
+                <p className="text-gray-600 dark:text-gray-300 text-sm font-medium">
+                  Discover {filteredMedicine.length}{" "}
+                  {filteredMedicine.length === 1 ? "medicine" : "medicines"} in
+                  this category
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </>
+      </Link>
     </div>
   );
 };
