@@ -17,15 +17,14 @@ const Dashboard = () => {
       data-aos-duration="1000"
       data-aos-anchor-placement="top-center"
       className="relative h-screen md:flex bg-gray-50 overflow-hidden"
-      
     >
       <Helmet>
         <title>Dashboard</title>
       </Helmet>
       {/*Dasboard SideBar */}
-      <div className="p-2"><Sidebar></Sidebar></div>
+      <Sidebar />
       {/* Dashboard content*/}
-      <div className="flex-1 md:ml-64 h-screen overflow-y-auto">
+      <div className="flex-1 md:ml-72 h-screen overflow-y-auto">
         <div className=" min-h-full p-2">
           <Outlet></Outlet>
         </div>
