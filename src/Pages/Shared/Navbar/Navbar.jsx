@@ -131,7 +131,7 @@ const Navbar = () => {
             {navLinks}
           </ul>
         </div>
-        <Link to="/">
+        <Link to="/" className="flex items-center">
           <span className="text-3xl rounded-lg px-4 py-2 bg-purple-100 font-bold opacity-80">
             {" "}
             <span className="text-[#7600dc]">Med</span>vantage
