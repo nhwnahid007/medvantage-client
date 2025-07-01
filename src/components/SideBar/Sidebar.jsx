@@ -92,17 +92,15 @@ const Sidebar = () => {
             </span>
           </Link>
         </div>
-        <button
-          onClick={handleToggle}
-          className="mobile-menu-button p-4 focus:outline-none focus:bg-gray-200 transition"
-          aria-label={isActive ? "Close sidebar" : "Open sidebar"}
-        >
-          {isActive ? (
-            <AiOutlineClose className="h-6 w-6 transition-transform duration-200" />
-          ) : (
+        {!isActive && (
+          <button
+            onClick={handleToggle}
+            className="mobile-menu-button p-4 focus:outline-none focus:bg-gray-200 transition"
+            aria-label="Open sidebar"
+          >
             <AiOutlineBars className="h-6 w-6 transition-transform duration-200" />
-          )}
-        </button>
+          </button>
+        )}
       </div>
 
       {/* Sidebar for mobile (overlay) */}

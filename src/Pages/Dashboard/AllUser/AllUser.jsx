@@ -61,15 +61,13 @@ const AllUser = () => {
     });
   };
 
-  // Sort users by registration date (latest first)
+  // Sort users by registration date
   const sortedUsers = [...users].sort((a, b) => {
-    // Extract timestamp from MongoDB ObjectId
     const timestampA = new Date(parseInt(a._id.substring(0, 8), 16) * 1000);
     const timestampB = new Date(parseInt(b._id.substring(0, 8), 16) * 1000);
-    return timestampB - timestampA; // Latest first
+    return timestampB - timestampA;
   });
 
-  // Count users by role
   const userCount = users.filter((user) => user.role === "user").length;
   const sellerCount = users.filter((user) => user.role === "seller").length;
   const adminCount = users.filter((user) => user.role === "admin").length;
@@ -80,38 +78,32 @@ const AllUser = () => {
         <title>Users</title>
       </Helmet>
 
-      <div className="my-10">
-        <div className="flex items-center justify-between">
-          <SectionHeading heading="Manage Users" />
-          <div className="flex gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-800">
-                {users.length}
-              </div>
-              <div className="text-sm text-gray-600">Total Users</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">
-                {userCount}
-              </div>
-              <div className="text-sm text-gray-600">Users</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">
-                {sellerCount}
-              </div>
-              <div className="text-sm text-gray-600">Sellers</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">
-                {adminCount}
-              </div>
-              <div className="text-sm text-gray-600">Admins</div>
-            </div>
-          </div>
+      {/* Heading */}
+      <div className="mt-10 mb-4">
+        <SectionHeading heading="Manage Users" />
+      </div>
+
+      {/* Summary cards under heading */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        <div className="text-center bg-white shadow rounded p-4">
+          <div className="text-xl font-bold text-gray-800">{users.length}</div>
+          <div className="text-sm text-gray-600">Total Users</div>
+        </div>
+        <div className="text-center bg-white shadow rounded p-4">
+          <div className="text-xl font-bold text-blue-600">{userCount}</div>
+          <div className="text-sm text-gray-600">Users</div>
+        </div>
+        <div className="text-center bg-white shadow rounded p-4">
+          <div className="text-xl font-bold text-green-600">{sellerCount}</div>
+          <div className="text-sm text-gray-600">Sellers</div>
+        </div>
+        <div className="text-center bg-white shadow rounded p-4">
+          <div className="text-xl font-bold text-purple-600">{adminCount}</div>
+          <div className="text-sm text-gray-600">Admins</div>
         </div>
       </div>
 
+      {/* User table */}
       <div className="overflow-x-auto shadow-md rounded-lg bg-white">
         <table className="table w-full text-sm text-left text-gray-700">
           <thead className="text-xs uppercase bg-gray-100 text-gray-600">
@@ -127,7 +119,6 @@ const AllUser = () => {
           </thead>
           <tbody>
             {sortedUsers.map((user, index) => {
-              // Extract registration date from MongoDB ObjectId
               const registrationDate = new Date(
                 parseInt(user._id.substring(0, 8), 16) * 1000
               );
