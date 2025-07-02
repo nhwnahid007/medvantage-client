@@ -60,33 +60,92 @@ const PaymentManagement = () => {
       </Helmet>
 
       <div className="mt-10 mb-6">
-        <div className="flex items-center justify-between">
-          <SectionHeading heading="Manage Payments" />
-          <div className="flex gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-800">
-                {payment.length}
+        <SectionHeading heading="Manage Payments" />
+
+        {/* Responsive Statistics Section */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Payments
+                </p>
+                <p className="text-3xl font-bold text-gray-900">
+                  {payment.length}
+                </p>
               </div>
-              <div className="text-sm text-gray-600">Total Payments</div>
+              <div className="p-3 bg-blue-100 rounded-full">
+                <svg
+                  className="w-6 h-6 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                  ></path>
+                </svg>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-600">
-                {pendingCount}
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Pending</p>
+                <p className="text-3xl font-bold text-yellow-600">
+                  {pendingCount}
+                </p>
               </div>
-              <div className="text-sm text-gray-600">Pending</div>
+              <div className="p-3 bg-yellow-100 rounded-full">
+                <svg
+                  className="w-6 h-6 text-yellow-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">
-                {paidCount}
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 sm:col-span-2 lg:col-span-1">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Paid</p>
+                <p className="text-3xl font-bold text-green-600">{paidCount}</p>
               </div>
-              <div className="text-sm text-gray-600">Paid</div>
+              <div className="p-3 bg-green-100 rounded-full">
+                <svg
+                  className="w-6 h-6 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Filter Section */}
         <div className="mb-6">
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
             <label className="text-sm font-medium text-gray-700">
               Filter by status:
             </label>

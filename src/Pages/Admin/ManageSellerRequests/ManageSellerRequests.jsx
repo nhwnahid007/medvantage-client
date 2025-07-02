@@ -131,24 +131,101 @@ const ManageSellerRequests = () => {
       </Helmet>
 
       <div className="my-10">
-        <div className="flex items-center justify-between">
-          <SectionHeading heading="Manage Seller Requests" />
-          <div className="flex gap-4">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-800">{sellerRequests.length}</div>
-              <div className="text-sm text-gray-600">Total Requests</div>
+        <SectionHeading heading="Manage Seller Requests" />
+
+        {/* Responsive Statistics Section */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Requests
+                </p>
+                <p className="text-3xl font-bold text-gray-900">
+                  {sellerRequests.length}
+                </p>
+              </div>
+              <div className="p-3 bg-blue-100 rounded-full">
+                <svg
+                  className="w-6 h-6 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  ></path>
+                </svg>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-600">{pendingCount}</div>
-              <div className="text-sm text-gray-600">Pending</div>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Pending</p>
+                <p className="text-3xl font-bold text-yellow-600">
+                  {pendingCount}
+                </p>
+              </div>
+              <div className="p-3 bg-yellow-100 rounded-full">
+                <svg
+                  className="w-6 h-6 text-yellow-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 sm:col-span-2 lg:col-span-1">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-600">Approved</p>
+                <p className="text-3xl font-bold text-green-600">
+                  {
+                    sellerRequests.filter(
+                      (request) => request.status === "approved"
+                    ).length
+                  }
+                </p>
+              </div>
+              <div className="p-3 bg-green-100 rounded-full">
+                <svg
+                  className="w-6 h-6 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+              </div>
             </div>
           </div>
         </div>
-        
+
         {/* Filter Section */}
         <div className="mb-6">
-          <div className="flex items-center gap-4">
-            <label className="text-sm font-medium text-gray-700">Filter by status:</label>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <label className="text-sm font-medium text-gray-700">
+              Filter by status:
+            </label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
@@ -160,7 +237,8 @@ const ManageSellerRequests = () => {
               <option value="rejected">Rejected</option>
             </select>
             <span className="text-sm text-gray-600">
-              Showing {sortedRequests.length} of {sellerRequests.length} requests
+              Showing {sortedRequests.length} of {sellerRequests.length}{" "}
+              requests
             </span>
           </div>
         </div>

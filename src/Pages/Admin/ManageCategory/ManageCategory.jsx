@@ -4,7 +4,6 @@ import { MdDeleteForever } from "react-icons/md";
 import Swal from "sweetalert2";
 import UseAxiosSecure from "../../../Hooks/UseAxiosSecure";
 import toast from "react-hot-toast";
-import LoadingSpinner from "../../../components/Shared/LoadinSpinner";
 import { Helmet } from "react-helmet-async";
 import useCategory from "../../../Hooks/useCategory";
 import { useState } from "react";
@@ -95,26 +94,66 @@ const ManageCategory = () => {
 
       <div className="my-10">
         <SectionHeading heading="Manage Categories" />
-      </div>
 
-      {/* Action Buttons */}
-      <div className="flex justify-center gap-4 mb-6">
-        <button
-          className="btn bg-purple-600 text-white hover:bg-purple-700"
-          onClick={() => document.getElementById("category_modal").showModal()}
-        >
-          Add Category
-        </button>
-        <Link to="/dashboard/addMedicine">
-          <button className="btn bg-green-600 text-white hover:bg-green-700">
-            Add Medicine
+        {/* Responsive Statistics Section */}
+        <div className="grid grid-cols-1 gap-4 mb-8">
+          <div className="bg-gradient-to-br from-blue-50 to-indigo-100 p-8 rounded-2xl shadow-xl border border-blue-200 max-w-md mx-auto transform hover:scale-105 transition-all duration-300">
+            <div className="flex items-center justify-between">
+              <div className="space-y-2">
+                <p className="text-sm pr-1 font-semibold text-blue-700 uppercase tracking-wide">
+                  Total Categories
+                </p>
+                <p className="text-4xl font-bold text-gray-900">
+                  {categories?.length || 0}
+                </p>
+                
+              </div>
+              <div className="p-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-lg">
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-blue-200">
+              <div className="flex items-center justify-between text-xs text-blue-600">
+                <span>Last updated</span>
+                <span>{new Date().toLocaleDateString()}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
+          <button
+            className="btn bg-purple-600 text-white hover:bg-purple-700 w-full sm:w-auto"
+            onClick={() =>
+              document.getElementById("category_modal").showModal()
+            }
+          >
+            Add Category
           </button>
-        </Link>
-        <Link to="/dashboard/manageMedicines">
-          <button className="btn bg-blue-600 text-white hover:bg-blue-700">
-            Manage Medicines
-          </button>
-        </Link>
+          <Link to="/dashboard/addMedicine">
+            <button className="btn bg-green-600 text-white hover:bg-green-700 w-full sm:w-auto">
+              Add Medicine
+            </button>
+          </Link>
+          <Link to="/dashboard/manageMedicines">
+            <button className="btn bg-blue-600 text-white hover:bg-blue-700 w-full sm:w-auto">
+              Manage Medicines
+            </button>
+          </Link>
+        </div>
       </div>
 
       {/* Add Category Modal */}
